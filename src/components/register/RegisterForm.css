@@ -1,0 +1,12 @@
+.btnLink {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    color: blue;
+    cursor: pointer;
+}
+
+.wrongEmail {
+    color: red;
+    font-size: x-small;
+}
