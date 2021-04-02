@@ -17,6 +17,7 @@ class RegisterForm extends Component {
             alertPasswordsNoMatch: false,
             alertTermsAndConditonsNotAccepted: true,
             alertEmailWrongFormat: false,
+            emailAlreadyExists: false
         }
     }
 
@@ -25,7 +26,8 @@ class RegisterForm extends Component {
     }
 
     onConfirmPasswordChange = (event) => {
-        this.setState({ confirmPassword: event.target.value })
+        this.setState({ confirmPassword: event.target.value });
+        this.setState({ number: true });
     }
 
     onPasswordChange = (event) => {
@@ -78,31 +80,42 @@ class RegisterForm extends Component {
             this.setState({ alertTermsAndConditonsNotAccepted: true })
         }
 
-        if(ok === 0) {
-            
-            fetch('http://localhost:4400/users/register', {
-                method: 'post',
-                headers: {'Content-type': 'application/json'},
-                body: JSON.stringify({
-                    firstName: "",
-                    lastName: "",
-                    email: this.state.email,
-                    password: this.state.password,
-                    birthday: '1995-05-22'
-                })
+        fetch(`http://localhost:4400/users?email=${this.state.email}`, {
+                method: 'get'
             })
                 .then(response => response.json())
-                .then(user => {
-                    if(user && user['data'] && user['data']['id']) {
-                        //aici la loadUser trebuie sa vad cum fac sa pun si firstName, lastName -- o sa le trimit
-                        //siruri goale si daca e dupa cand sunt completate se face update
-                        this.props.loadUser(user);
-                        this.props.onRouteChange('home');
+                .then(response => {
+                    if(response['data'] && response['data'][0] && response['data'][0]['email']) {
+                        ok = 1;
+                        this.setState({ emailAlreadyExists: true });
+                    }
+                    else ok = 0;
+                    return ok;
+                })
+                .then(ok => {
+                    if(ok === 0 && this.state.alertEmailWrongFormat === false) {
+                        fetch('http://localhost:4400/users/register', {
+                            method: 'post',
+                            headers: {'Content-type': 'application/json'},
+                            body: JSON.stringify({
+                                firstName: "",
+                                lastName: "",
+                                email: this.state.email,
+                                password: this.state.password,
+                                birthday: '1995-05-22'
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(user => {
+                                if(user && user['data'] && user['data']['id']) {
+                                    this.props.loadUser(user['data']);
+                                    this.props.onRouteChange('home');
+                                }
+                            })
+                    } else {
+                        return;
                     }
                 })
-        } else {
-            return;
-        }
     }
 
     render() {
@@ -112,6 +125,7 @@ class RegisterForm extends Component {
             alertPasswordsNoMatch,
             alertTermsAndConditonsNotAccepted, 
             alertEmailWrongFormat,
+            emailAlreadyExists
         } = this.state;
 
         return(
@@ -120,16 +134,24 @@ class RegisterForm extends Component {
                         <Form.Label>Email address</Form.Label>
                         <Form.Control size="sm" placeholder="Enter email" onChange={this.onEmailChange}/>
                         {
-                            alertEmailWrongFormat === false
+                            alertEmailWrongFormat === true 
                             ? <div>
-                                <Form.Text className="text-muted">
-                                    We`ll never share yout email with anyone else.
-                                </Form.Text>
-                              </div>
-                            :(
                                 <Form.Text className="text-muted">
                                     <h6 className="wrongEmail">Email does not exist!</h6>
                                 </Form.Text>
+                              </div>
+                            :(
+                                emailAlreadyExists === true
+                                ?  <div>
+                                    <Form.Text className="text-muted">
+                                        <h6 className="wrongEmail">There is already an account with this email.</h6>
+                                    </Form.Text>
+                                  </div>
+                                : <div>
+                                    <Form.Text className="text-muted">
+                                        We`ll never share yout email with anyone else.
+                                    </Form.Text>
+                                  </div>
                             )
                         }
                     </Form.Group>

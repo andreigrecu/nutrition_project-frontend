@@ -46,7 +46,6 @@ class App extends Component {
   render() {
 
     const { route } = this.state;
-
     return (
       <div>
         { route === 'signin'
@@ -54,7 +53,7 @@ class App extends Component {
               <WelcomePage loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
             </div>
           : (
-              <p>HEHE PANDURII</p>
+              <p>21</p>
           )
         }
       </div>
