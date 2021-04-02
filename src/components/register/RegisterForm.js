@@ -17,8 +17,6 @@ class RegisterForm extends Component {
             alertPasswordsNoMatch: false,
             alertTermsAndConditonsNotAccepted: true,
             alertEmailWrongFormat: false,
-            triggeredPassword: null,
-            triggeredMatchPassword: false
         }
     }
 
@@ -28,22 +26,13 @@ class RegisterForm extends Component {
 
     onConfirmPasswordChange = (event) => {
         this.setState({ confirmPassword: event.target.value })
-        this.setState({ triggeredMatchPassword: true })
-
-        if(event.target.value === this.state.password)
-            this.setState({ alertPasswordsNoMatch: false })
-        else 
-            this.setState({ alertPasswordsNoMatch: true })
     }
 
     onPasswordChange = (event) => {
-        this.setState({ password: event.target.value });
-        this.setState({ triggeredPassword: true });
+        this.setState({ password: event.target.value }); 
 
-        if(event.target.value.length <= 6 )
-            this.setState({ alertPasswordLength: true });
-        else
-            this.setState({ alertPasswordLength: false }); 
+        if(event.target.value.length >= 6)
+            this.setState({ alertPasswordLength: false });
     }
 
     onTermsAndConditionsChange = (event) => {
@@ -61,15 +50,18 @@ class RegisterForm extends Component {
  
         let ok = 0;
 
-        if(this.state.alertPasswordLength === true || this.state.alertPasswordsNoMatch === true || this.state.triggeredMatchPassword === false) {
+        if(this.state.password.length < 6) {
             ok = 1;
+            this.setState({ alertPasswordLength: true });
+        } else {
+            this.setState({ alertPasswordLength: false });
         }
-
-        if(this.state.triggeredPassword === null) {
+        
+        if(this.state.password !== this.state.confirmPassword) {
             ok = 1;
-            this.setState({ triggeredPassword: false });
-        } else if(this.state.triggeredPassword === false) {
-            this.setState({ triggeredPassword: true });
+            this.setState({ alertPasswordsNoMatch: true });
+        } else {
+            this.setState({ alertPasswordsNoMatch: false });
         }
 
         if(this.checkEmailForm(this.state.email) === false) {
@@ -77,7 +69,7 @@ class RegisterForm extends Component {
             this.setState({ alertEmailWrongFormat: true })
         } else {
             this.setState({ alertEmailWrongFormat: false })
-        }
+        } 
 
         if(this.state.termsAndConditionsAgreed === false) {
             ok = 1;
@@ -88,7 +80,6 @@ class RegisterForm extends Component {
 
         if(ok === 0) {
             
-
             fetch('http://localhost:4400/users/register', {
                 method: 'post',
                 headers: {'Content-type': 'application/json'},
@@ -103,6 +94,8 @@ class RegisterForm extends Component {
                 .then(response => response.json())
                 .then(user => {
                     if(user && user['data'] && user['data']['id']) {
+                        //aici la loadUser trebuie sa vad cum fac sa pun si firstName, lastName -- o sa le trimit
+                        //siruri goale si daca e dupa cand sunt completate se face update
                         this.props.loadUser(user);
                         this.props.onRouteChange('home');
                     }
@@ -119,8 +112,6 @@ class RegisterForm extends Component {
             alertPasswordsNoMatch,
             alertTermsAndConditonsNotAccepted, 
             alertEmailWrongFormat,
-            triggeredPassword,
-            triggeredMatchPassword
         } = this.state;
 
         return(
@@ -147,7 +138,7 @@ class RegisterForm extends Component {
                         <Form.Label>Password</Form.Label>
                         <Form.Control type="password" size="sm" placeholder="Password" onChange={this.onPasswordChange}/>
                         {
-                            ( alertPasswordLength === true || triggeredPassword === false)
+                            alertPasswordLength === true
                             ?   <div>
                                     <Form.Text className="text-muted">
                                         <h6 style={{'color': 'red'}}>Chose a longer password!</h6>
@@ -163,7 +154,7 @@ class RegisterForm extends Component {
                         <Form.Label>Confirm password</Form.Label>
                         <Form.Control type="password" size="sm" placeholder="ConfirmPassword" onChange={this.onConfirmPasswordChange}/>
                         {
-                            (alertPasswordsNoMatch === true || (triggeredMatchPassword === false && triggeredPassword === true ))
+                            alertPasswordsNoMatch === true
                             ? <div>
                                 <Form.Text className="text-muted">
                                     <h6 style={{'color': 'red'}}>Passwords don`t match!</h6>
