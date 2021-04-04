@@ -1,10 +1,10 @@
 import './App.css';
 import React, { Component } from 'react';
 import  WelcomePage  from '../components/welcomePage/WelcomePage';
+import SignInPage from '../components/signin/SignInPage';
 
 const initialState = {
-  input: '',
-  route: 'signin',
+  route: 'signout',
   isSignedIn: 'false',
   user: {
     firstName: '',
@@ -45,15 +45,23 @@ class App extends Component {
 
   render() {
 
+    console.clear();
     const { route } = this.state;
     return (
       <div>
-        { route === 'signin'
+        { route === 'signout'
           ? <div>
               <WelcomePage loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
             </div>
-          : (
-              <p>21</p>
+          : ( 
+            route === 'signin'
+            ?
+              <div>
+                <SignInPage loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+              </div>
+            :(
+              <p>HOME PAGE BABY</p>
+            )
           )
         }
       </div>

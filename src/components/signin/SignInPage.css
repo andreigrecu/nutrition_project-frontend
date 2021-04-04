@@ -1,0 +1,44 @@
+.title {
+    text-align: center;
+    padding-top: 20%;
+    color: white;
+}
+
+.logo {
+    text-align: center;
+    padding-top: 20%;
+    color: white;
+}
+
+.text {
+    text-align: center;
+    padding-top: 5%;
+    color: white;
+    padding-bottom: 5%;
+}
+
+.background-image {
+    background-image: url("background.jpg");
+}
+
+.login {
+    color: white;
+    text-align: center;
+    padding-top: 10%;
+    padding-bottom: 5%;
+}
+
+.needAccount {
+    color: white;
+    padding-top: 3%;
+}
+
+.form-bottom {
+    padding-bottom: 10%;
+}
+
+.btn-footer {
+    color: white !important;
+    padding-top: 10% !important;
+    font-size: 80% !important;
+}
