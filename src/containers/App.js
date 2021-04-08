@@ -1,10 +1,11 @@
 import './App.css';
 import React, { Component } from 'react';
 import  WelcomePage  from '../components/welcomePage/WelcomePage';
+import SignInPage from '../components/signin/SignInPage';
+import NewUserData from '../components/userProfile/NewUserData';
 
 const initialState = {
-  input: '',
-  route: 'signin',
+  route: 'signout',
   isSignedIn: 'false',
   user: {
     firstName: '',
@@ -45,15 +46,26 @@ class App extends Component {
 
   render() {
 
+    console.clear();
     const { route } = this.state;
     return (
       <div>
-        { route === 'signin'
-          ? <div>
-              <WelcomePage loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-            </div>
-          : (
-              <p>21</p>
+        { route === 'signout'
+          ? 
+            <WelcomePage loadUser={this.loadUser} onRouteChange={this.onRouteChange} route={this.state.route} />
+          : ( 
+            route === 'signin'
+            ?
+              <SignInPage loadUser={this.loadUser} onRouteChange={this.onRouteChange} route={this.state.route} />
+            : ( 
+              route === 'aboutUs'
+              ? <p>AboutUs</p>
+              : (
+                  route === 'termsAndConditions'
+                  ? <p> terms and conditions page</p>
+                  : <NewUserData />
+              )
+            )
           )
         }
       </div>
