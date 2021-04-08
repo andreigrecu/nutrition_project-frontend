@@ -14,11 +14,15 @@ class SignInPage extends Component {
         this.state = {};
     }
 
+    changeRouteToAboutUs = () => {
+        this.props.onRouteChange('aboutUs');
+    }
+
     render() {
 
         return(
             <div>
-                <NavigationBar />
+                <NavigationBar onRouteChange={this.props.onRouteChange} route={this.props.route} />
                 <Container fluid={true} className="p-0 background-image">
                     <Row noGutters>
                         <Col sm="3"></Col>
@@ -49,7 +53,7 @@ class SignInPage extends Component {
                     <Row>
                         <Col sm="5" style={{'paddingBottom': '5%'}}></Col>
                         <Col sm="2" style={{'textAlign': 'center', 'paddingBottom': '5%'}}>
-                            <Button variant="link" className="btn-footer">About</Button>
+                            <Button variant="link" className="btn-footer" onClick={this.changeRouteToAboutUs}>About</Button>
                             <Button variant="link" className="btn-footer">Help</Button>
                         </Col>
                         <Col sm="5" style={{'paddingBottom': '5%'}}></Col>

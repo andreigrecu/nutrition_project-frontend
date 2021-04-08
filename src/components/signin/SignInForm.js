@@ -15,6 +15,10 @@ class SignInForm extends Component {
         }
     }
 
+    changeRouteToRegister = () => {
+        this.props.onRouteChange('signout');
+    }
+
     onEmailChange = (event) => {
         this.setState({ email: event.target.value });
     }
@@ -56,7 +60,7 @@ class SignInForm extends Component {
                 .then(response => {
                     if(response && response['data'] && response['data']['user']['id']) {
                         this.props.loadUser(response['data']['user']);
-                        this.props.onRouteChange('signout');
+                        this.props.onRouteChange('home');
                     }
                     else {
                         this.setState({ wrongCredentials: true });
@@ -114,7 +118,7 @@ class SignInForm extends Component {
 
                 <Form.Label className="needAccount" style={{'fontSize': '100%'}}>Need an account?</Form.Label>
                 <div>
-                    <Button variant="link" style={{'padding': '0', 'display': 'inline'}}>Sign Up</Button>
+                    <Button variant="link" style={{'padding': '0', 'display': 'inline'}} onClick={this.changeRouteToRegister}>Sign Up</Button>
                 </div>
             </Form>
         )

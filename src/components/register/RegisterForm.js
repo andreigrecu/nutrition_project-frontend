@@ -48,6 +48,11 @@ class RegisterForm extends Component {
         return re.test(String(email).toLowerCase());
     }
 
+    onRouteChangeToTermsAndCondtions = () => {
+        console.log("intra")
+        this.props.onRouteChange('termsAndConditions');
+    }
+
     onSubmitSignIn = () => {
  
         let ok = 0;
@@ -116,6 +121,30 @@ class RegisterForm extends Component {
                         return;
                     }
                 })
+
+                // fetch('https://api.spoonacular.com/food/ingredients/search?query=cheese cake&number=4&apiKey=edc51a73fafe413298abeccb540eb9f0&includeNutrition=true',{
+                //     method: 'get'
+                // })
+                // .then(response => response.json())
+                // .then(response => {
+                //     fetch(`https://api.spoonacular.com/food/ingredients/${response['results'][0]['id']}/information?amount=1&apiKey=edc51a73fafe413298abeccb540eb9f0`, {
+                //         method: 'get'
+                //     })
+                //         .then(response => response.json())
+                //         .then(response => console.log(response))
+                //         .catch(err => console.log(err))
+                //     console.log(response)
+                // })
+                // .catch(err => console.log(err))
+
+                // fetch('https://api.spoonacular.com/food/menuItems/search?query=coffe&apiKey=edc51a73fafe413298abeccb540eb9f0&includeNutrition=true', {
+                //     method: 'get'
+                // })
+                // .then(response => response.json())
+                // .then(response => console.log(response))
+
+                
+
     }
 
     render() {
@@ -191,7 +220,7 @@ class RegisterForm extends Component {
                     <Form.Group controlId="formBasicCheckbox">
                         <input type="checkbox" id="checkboxTerms" name="checkboxTerms" onChange={this.onTermsAndConditionsChange} />
                         <Form.Label style={{'paddingLeft': '2%', 'paddingRight': '1%'}}>I agree with the</Form.Label>
-                        <button type="button" className="btnLink">terms and conditions.</button>
+                        <button type="button" className="btnLink" onClick={this.onRouteChangeToTermsAndCondtions}>terms and conditions.</button>
                         {
                             alertTermsAndConditonsNotAccepted === false
                             ? <div>

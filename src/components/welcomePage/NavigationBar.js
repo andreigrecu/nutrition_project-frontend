@@ -16,6 +16,10 @@ class NavigationBar extends Component {
         this.props.onRouteChange('signin');
     }
 
+    changeRouteToAboutUs = () => {
+        this.props.onRouteChange('aboutUs');
+    }
+
     render() {
         return(
             <Container fluid={true} className="p-0">
@@ -23,9 +27,9 @@ class NavigationBar extends Component {
                     <Col sm="12">
                         <Navbar bg="dark" variant="dark">
                             <Nav className="mr-auto">
-                                <Nav.Link>Home</Nav.Link>
+                                {/*<Nav.Link>Home</Nav.Link>*/}
                                 <Nav.Link onClick={this.changeRouteToSignIn}>Sign In</Nav.Link>
-                                <Nav.Link>About Us</Nav.Link>
+                                <Nav.Link onClick={this.changeRouteToAboutUs}>About Us</Nav.Link>
                             </Nav>
                             <Nav className="ml-auto">
                                 <Nav.Link>Logo</Nav.Link>
