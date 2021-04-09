@@ -2,7 +2,7 @@ import './App.css';
 import React, { Component } from 'react';
 import  WelcomePage  from '../components/welcomePage/WelcomePage';
 import SignInPage from '../components/signin/SignInPage';
-import NewUserData from '../components/userProfile/NewUserData';
+import UserProfile from '../components/userProfile/UserProfile';
 
 const initialState = {
   route: 'signout',
@@ -37,7 +37,7 @@ class App extends Component {
   onRouteChange = (route) => {
     if(route === 'signout') {
       this.setState(initialState);
-    } else if(route === 'home') {
+    } else if(route === 'home' || route === 'addFood') {
       this.setState({isSignedIn: true})
     }
 
@@ -46,7 +46,6 @@ class App extends Component {
 
   render() {
 
-    console.clear();
     const { route } = this.state;
     return (
       <div>
@@ -63,7 +62,7 @@ class App extends Component {
               : (
                   route === 'termsAndConditions'
                   ? <p> terms and conditions page</p>
-                  : <NewUserData />
+                  : <UserProfile onRouteChange={this.onRouteChange} route={route}/>
               )
             )
           )

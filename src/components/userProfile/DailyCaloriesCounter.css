@@ -1,0 +1,22 @@
+.align {
+    text-align: center;
+}
+
+.counterText {
+    color: grey;
+    font-size: x-small;
+}
+
+.stayStrong {
+    font-family: Brush Script MT, Brush Script Std, cursive;
+}
+
+.changeMeasureType {
+    padding-bottom: 3%;
+}
+
+.plus {
+    font-size: 250%;
+    color: blue;
+    text-align: center;
+}
