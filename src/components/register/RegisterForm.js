@@ -49,7 +49,6 @@ class RegisterForm extends Component {
     }
 
     onRouteChangeToTermsAndCondtions = () => {
-        console.log("intra")
         this.props.onRouteChange('termsAndConditions');
     }
 
