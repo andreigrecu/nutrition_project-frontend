@@ -13,8 +13,8 @@ class WelcomePage extends Component {
         return(
             <div>
                 <div style={{'backgroundColor': 'rgba(0, 34, 84, 0.1)'}}>
-                    <NavigationBar onRouteChange={this.props.onRouteChange} route={this.props.route} ></NavigationBar>
-                    <MiddleComponent loadUser={this.props.loadUser} onRouteChange={this.props.onRouteChange}></MiddleComponent>
+                    <NavigationBar></NavigationBar>
+                    <MiddleComponent loadUser={this.props.loadUser} ></MiddleComponent>
                 </div>
             </div>
         );

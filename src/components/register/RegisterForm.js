@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './RegisterForm.css';
-
+import { withRouter } from 'react-router-dom';
 
 class RegisterForm extends Component {
 
@@ -49,7 +49,7 @@ class RegisterForm extends Component {
     }
 
     onRouteChangeToTermsAndCondtions = () => {
-        this.props.onRouteChange('termsAndConditions');
+       this.props.history.push('/termsAndConditions');
     }
 
     onSubmitSignIn = () => {
@@ -93,11 +93,16 @@ class RegisterForm extends Component {
                         ok = 1;
                         this.setState({ emailAlreadyExists: true });
                     }
-                    else ok = 0;
+                    else {
+                        this.setState({ emailAlreadyExists: false });
+                        ok = 0;
+                    }
                     return ok;
                 })
                 .then(ok => {
+                    console.log("ajunge")
                     if(ok === 0 && this.state.alertEmailWrongFormat === false) {
+                        console.log("ajunge")
                         fetch('http://localhost:4400/users/register', {
                             method: 'post',
                             headers: {'Content-type': 'application/json'},
@@ -113,37 +118,13 @@ class RegisterForm extends Component {
                             .then(user => {
                                 if(user && user['data'] && user['data']['id']) {
                                     this.props.loadUser(user['data']);
-                                    this.props.onRouteChange('home');
+                                    this.props.history.push('/users');
                                 }
                             })
                     } else {
                         return;
                     }
                 })
-
-                // fetch('https://api.spoonacular.com/food/ingredients/search?query=cheese cake&number=4&apiKey=edc51a73fafe413298abeccb540eb9f0&includeNutrition=true',{
-                //     method: 'get'
-                // })
-                // .then(response => response.json())
-                // .then(response => {
-                //     fetch(`https://api.spoonacular.com/food/ingredients/${response['results'][0]['id']}/information?amount=1&apiKey=edc51a73fafe413298abeccb540eb9f0`, {
-                //         method: 'get'
-                //     })
-                //         .then(response => response.json())
-                //         .then(response => console.log(response))
-                //         .catch(err => console.log(err))
-                //     console.log(response)
-                // })
-                // .catch(err => console.log(err))
-
-                // fetch('https://api.spoonacular.com/food/menuItems/search?query=coffe&apiKey=edc51a73fafe413298abeccb540eb9f0&includeNutrition=true', {
-                //     method: 'get'
-                // })
-                // .then(response => response.json())
-                // .then(response => console.log(response))
-
-                
-
     }
 
     render() {
@@ -248,4 +229,4 @@ class RegisterForm extends Component {
     }
 }
 
-export default RegisterForm;
+export default withRouter(RegisterForm);

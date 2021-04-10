@@ -4,20 +4,20 @@ import React, { Component } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import { withRouter } from 'react-router-dom';
 
 class NavigationBar extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state={};
-    }
-
     changeRouteToSignIn = () => {
-        this.props.onRouteChange('signin');
+        this.props.history.push('/signin');
     }
 
     changeRouteToAboutUs = () => {
-        this.props.onRouteChange('aboutUs');
+        this.props.history.push('/about');
+    }
+
+    changeRouteToHome = () => {
+        this.props.history.push('/');
     }
 
     render() {
@@ -27,7 +27,7 @@ class NavigationBar extends Component {
                     <Col sm="12">
                         <Navbar bg="dark" variant="dark">
                             <Nav className="mr-auto">
-                                {/*<Nav.Link>Home</Nav.Link>*/}
+                                <Nav.Link onClick={this.changeRouteToHome}>Home</Nav.Link>
                                 <Nav.Link onClick={this.changeRouteToSignIn}>Sign In</Nav.Link>
                                 <Nav.Link onClick={this.changeRouteToAboutUs}>About Us</Nav.Link>
                             </Nav>
@@ -42,4 +42,4 @@ class NavigationBar extends Component {
     }
 }
 
-export default NavigationBar;
+export default withRouter(NavigationBar);

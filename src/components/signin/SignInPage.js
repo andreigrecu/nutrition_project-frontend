@@ -15,7 +15,7 @@ class SignInPage extends Component {
     }
 
     changeRouteToAboutUs = () => {
-        this.props.onRouteChange('aboutUs');
+        this.props.history.push('/about');
     }
 
     render() {
@@ -46,7 +46,7 @@ class SignInPage extends Component {
                         <Col sm="4"></Col>
                         <Col sm="4" style={{'borderStyle': 'solid', 'borderColor': 'white'}}>
                             <h4 className="login">Log In to Your Account</h4>
-                            <SignInForm loadUser={this.props.loadUser} onRouteChange={this.props.onRouteChange} />
+                            <SignInForm loadUser={this.props.loadUser} />
                         </Col>
                         <Col sm="4"></Col>
                     </Row>
