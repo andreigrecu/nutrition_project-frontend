@@ -1,12 +1,18 @@
 import './App.css';
 import React, { Component } from 'react';
-import  WelcomePage  from '../components/welcomePage/WelcomePage';
+import WelcomePage  from '../components/welcomePage/WelcomePage';
 import SignInPage from '../components/signin/SignInPage';
 import UserProfile from '../components/userProfile/UserProfile';
+import { 
+  BrowserRouter,
+  Switch,
+  Route
+} from "react-router-dom";
+import About from '../components/about/About';
+import TermsAndConditions from '../components/terms/TermsAndConditions';
+import ChooseFood from '../components/chooseFood/SearchFood';
 
 const initialState = {
-  route: 'signout',
-  isSignedIn: 'false',
   user: {
     firstName: '',
     lastName: '',
@@ -14,7 +20,6 @@ const initialState = {
     birthday: ''
   }
 }
-
 
 class App extends Component {
 
@@ -34,40 +39,24 @@ class App extends Component {
     })
   }
 
-  onRouteChange = (route) => {
-    if(route === 'signout') {
-      this.setState(initialState);
-    } else if(route === 'home' || route === 'addFood') {
-      this.setState({isSignedIn: true})
-    }
-
-    this.setState({route: route});
-  }
-
   render() {
 
-    const { route } = this.state;
-    return (
-      <div>
-        { route === 'signout'
-          ? 
-            <WelcomePage loadUser={this.loadUser} onRouteChange={this.onRouteChange} route={this.state.route} />
-          : ( 
-            route === 'signin'
-            ?
-              <SignInPage loadUser={this.loadUser} onRouteChange={this.onRouteChange} route={this.state.route} />
-            : ( 
-              route === 'aboutUs'
-              ? <p>AboutUs</p>
-              : (
-                  route === 'termsAndConditions'
-                  ? <p> terms and conditions page</p>
-                  : <UserProfile onRouteChange={this.onRouteChange} route={route}/>
-              )
-            )
-          )
-        }
-      </div>
+     return (
+       <BrowserRouter>
+          <Switch>
+            <Route path="/" exact render={(props) => (
+              <WelcomePage {... props} loadUser={this.loadUser} />
+            )} />
+            <Route path="/termsAndConditions" exact component={ TermsAndConditions } />
+            <Route path="/about" exact component={ About } />
+            <Route path="/signin" exact render={(props) => (
+              <SignInPage {... props} loadUser={this.loadUser} />
+            )} /> 
+            <Route path="/users" exact component={ UserProfile } />
+            <Route path="/chooseFood" exact component={ ChooseFood } />
+            <Route path="/" render={() => <div>404</div>} />
+          </Switch>
+       </BrowserRouter>
     );
   }
 }

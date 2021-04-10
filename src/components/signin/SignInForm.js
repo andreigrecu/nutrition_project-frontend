@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './SignInForm.css';
 import Modal from 'react-bootstrap/Modal';
+import { withRouter } from 'react-router-dom';
 
 class SignInForm extends Component {
     constructor(props) {
@@ -16,7 +17,7 @@ class SignInForm extends Component {
     }
 
     changeRouteToRegister = () => {
-        this.props.onRouteChange('signout');
+        this.props.history.push('/');
     }
 
     onEmailChange = (event) => {
@@ -60,7 +61,7 @@ class SignInForm extends Component {
                 .then(response => {
                     if(response && response['data'] && response['data']['user']['id']) {
                         this.props.loadUser(response['data']['user']);
-                        this.props.onRouteChange('home');
+                        this.props.history.push('/users');
                     }
                     else {
                         this.setState({ wrongCredentials: true });
@@ -125,4 +126,4 @@ class SignInForm extends Component {
     }
 }
 
-export default SignInForm;
+export default withRouter(SignInForm);
