@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import './UserProfile.css';
 import DailyCaloriesCounter from './DailyCaloriesCounter';
+import NewUserData from './NewUserData';
 
 class UserProfile extends Component {
     constructor(props) {
@@ -15,8 +16,15 @@ class UserProfile extends Component {
         return (       
             <Container fluid={true} className="userData">
                 <Row noGutters>
-                    {/*<NewUserData />
-                    <p>NAVBAR</p>*/}
+                    
+                    {
+                        this.props.user.firstLogin === true
+                        ?
+                        <NewUserData user={this.props.user}/>
+                        :(
+                            <div></div>
+                        )
+                    }
                     <DailyCaloriesCounter onRouteChange={() => this.props.history.push('/chooseFood')} />
                 </Row>
             </Container>               

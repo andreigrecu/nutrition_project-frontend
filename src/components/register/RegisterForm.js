@@ -100,9 +100,7 @@ class RegisterForm extends Component {
                     return ok;
                 })
                 .then(ok => {
-                    console.log("ajunge")
                     if(ok === 0 && this.state.alertEmailWrongFormat === false) {
-                        console.log("ajunge")
                         fetch('http://localhost:4400/users/register', {
                             method: 'post',
                             headers: {'Content-type': 'application/json'},

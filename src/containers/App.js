@@ -14,10 +14,11 @@ import ChooseFood from '../components/chooseFood/SearchFood';
 
 const initialState = {
   user: {
+    id: '',
     firstName: '',
     lastName: '',
     email: '',
-    birthday: ''
+    firstLogin: ''
   }
 }
 
@@ -31,10 +32,11 @@ class App extends Component {
   loadUser = (data) => {
     this.setState({
       user: {
+        id: data.id,
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
-        birthday: data.birthday
+        firstLogin: data.firstLogin
       }
     })
   }
@@ -52,7 +54,9 @@ class App extends Component {
             <Route path="/signin" exact render={(props) => (
               <SignInPage {... props} loadUser={this.loadUser} />
             )} /> 
-            <Route path="/users" exact component={ UserProfile } />
+            <Route path="/users" exact render={(props) => (
+              <UserProfile {... props} user={this.state.user} />
+            )} />
             <Route path="/chooseFood" exact component={ ChooseFood } />
             <Route path="/" render={() => <div>404</div>} />
           </Switch>

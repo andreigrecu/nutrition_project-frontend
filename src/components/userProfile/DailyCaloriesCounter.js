@@ -48,7 +48,6 @@ class DailyCaloriesCounter extends Component {
                         <div>1839</div>
                         <div className="counterText">Total</div>
                     </Col>
-                    {/*<Col sm="1" className="align" style={{'font-family': 'Snell Roundhand, cursive'}}>STAY STRONG</Col>*/}
                 </Row>
                 <hr></hr>
                 <button onClick={this.addFood}>ceva</button>
