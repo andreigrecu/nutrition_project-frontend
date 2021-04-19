@@ -129,11 +129,11 @@ class NewUserData extends Component {
                 method: 'post',
                 headers: {'Content-type': 'application/json'},
                 body: JSON.stringify({
-                    age: this.state.age,
-                    height: this.state.userHeight,
-                    weight: this.state.userWeight,
-                    weightGoal: this.state.userWeightGoal,
-                    numberOfDaysGoal: this.state.num_of_days_goal,
+                    age: parseInt(this.state.age),
+                    height: parseInt(this.state.userHeight),
+                    weight: parseInt(this.state.userWeight),
+                    weightGoal: parseInt(this.state.userWeightGoal),
+                    numberOfDaysGoal: parseInt(this.state.num_of_days_goal),
                     userId: this.props.user.id,
                     gender: gender
                 })

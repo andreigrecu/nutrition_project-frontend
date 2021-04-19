@@ -11,6 +11,7 @@ import {
 import About from '../components/about/About';
 import TermsAndConditions from '../components/terms/TermsAndConditions';
 import ChooseFood from '../components/chooseFood/SearchFood';
+import PlanList from '../components/plans/PlanList';
 
 const initialState = {
   user: {
@@ -57,6 +58,7 @@ class App extends Component {
             <Route path="/users" exact render={(props) => (
               <UserProfile {... props} user={this.state.user} />
             )} />
+            <Route path="/users/plans" exact component={ PlanList } />
             <Route path="/chooseFood" exact component={ ChooseFood } />
             <Route path="/" render={() => <div>404</div>} />
           </Switch>
