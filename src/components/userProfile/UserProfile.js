@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import './UserProfile.css';
 import DailyCaloriesCounter from './DailyCaloriesCounter';
 import NewUserData from './NewUserData';
+import SignedInNavigationBar from './SignedInNavigationBar';
 
 class UserProfile extends Component {
     constructor(props) {
@@ -15,6 +16,9 @@ class UserProfile extends Component {
     render() {
         return (       
             <Container fluid={true} className="userData">
+                <Row noGutters>
+                    <SignedInNavigationBar />
+                </Row>
                 <Row noGutters>
                     
                     {
