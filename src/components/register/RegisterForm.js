@@ -95,7 +95,6 @@ class RegisterForm extends Component {
                     }
                     else {
                         this.setState({ emailAlreadyExists: false });
-                        ok = 0;
                     }
                     return ok;
                 })
