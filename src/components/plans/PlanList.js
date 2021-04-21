@@ -134,7 +134,7 @@ class PlanList extends Component {
                                     </Row>
                                     <Row>
                                         <Col sm="12">
-                                            <div><div class='box blue'></div>Carbohydrates
+                                            <div><div className='box blue'></div>Carbohydrates
                                             <span style={{'float': 'right'}}>
                                                 <ButtonGroup size="sm" aria-label="Carbohydrates group">
                                                 <Button variant="secondary" className="mr-2" onClick={this.onSubstractCarbos}>-</Button>
@@ -143,7 +143,7 @@ class PlanList extends Component {
                                                 </ButtonGroup>
                                             </span></div>
                                             <br></br>
-                                            <div><div class='box red'></div>Fat
+                                            <div><div className='box red'></div>Fat
                                             <span style={{'float': 'right'}}>
                                                 <ButtonGroup size="sm" aria-label="Fats group">
                                                 <Button variant="secondary" className="mr-2" onClick={this.onSubstractFats}>-</Button>
@@ -152,7 +152,7 @@ class PlanList extends Component {
                                                 </ButtonGroup>
                                             </span></div>
                                             <br></br>
-                                            <div><div class='box green'></div>Protein
+                                            <div><div className='box green'></div>Protein
                                             <span style={{'float': 'right'}}>
                                                 <ButtonGroup size="sm" aria-label="Proteins group">
                                                 <Button variant="secondary" className="mr-2" onClick={this.onSubstractProteins}>-</Button>

@@ -42,8 +42,11 @@ class NewUserData extends Component {
             emptyWeight: true,
             emptyWeightGoal: true,
             emptyDaysGoal: true,
+            emptyHeight: true,
 
-            alertWeightGoal: false
+            alertWeightGoal: false,
+            alertWeightEmpty: false,
+            alertEmptyHeight: false
         };
     }
     
@@ -109,9 +112,9 @@ class NewUserData extends Component {
         
     }
 
-    handleSubmitSecondForm =() => {
+    handleSubmitSecondForm = () => {
 
-        let gender;
+        let gender = "";
         if(this.state.genderMale === true)
             gender = 'male';
         if(this.state.genderFemale === true)
@@ -124,19 +127,51 @@ class NewUserData extends Component {
         } else 
             this.setState({ alertWeightGoal: false });
 
+        if(this.state.emptyWeight) {
+            this.setState({ alertWeightEmpty: true });
+            makeCall = false;
+        } else 
+            this.setState({ alertWeightEmpty: false });
+
+        if(this.state.emptyHeight) {
+            this.setState({ alertEmptyHeight: true });
+            makeCall = false;
+        } else 
+            this.setState({ alertEmptyHeight: false });
+
         if(makeCall === true) {
+
+            const userInfo = {
+                age: parseInt(this.state.age),
+                height: parseInt(this.state.userHeight),
+                weight: parseInt(this.state.userWeight)
+            }
+
+            userInfo['weightGoal'] = -1;
+            if(this.state.userWeightGoal)
+                userInfo['weightGoal'] = parseInt(this.state.userWeightGoal);
+
+            if(this.state.num_of_days_goal)
+                userInfo['numberOfDaysGoal'] = parseInt(this.state.num_of_days_goal);
+            else
+                userInfo['numberOfDaysGoal'] = -1;
+
+            userInfo['userId'] = this.props.user.id;
+            userInfo['gender'] = gender;
+
             fetch('http://localhost:4400/usersInfo',{
                 method: 'post',
                 headers: {'Content-type': 'application/json'},
-                body: JSON.stringify({
-                    age: parseInt(this.state.age),
-                    height: parseInt(this.state.userHeight),
-                    weight: parseInt(this.state.userWeight),
-                    weightGoal: parseInt(this.state.userWeightGoal),
-                    numberOfDaysGoal: parseInt(this.state.num_of_days_goal),
-                    userId: this.props.user.id,
-                    gender: gender
-                })
+                body: JSON.stringify(
+                    // age: this.state.age,
+                    // height: this.state.userHeight,
+                    // weight: this.state.userWeight,
+                    // weightGoal: this.state.userWeightGoal,
+                    // numberOfDaysGoal: this.state.num_of_days_goal,
+                    // userId: this.props.user.id,
+                    // gender: gender
+                    userInfo
+                )
             })
                 .then(response => response.json())
                 .then(response => {
@@ -204,6 +239,10 @@ class NewUserData extends Component {
 
     onHeightChange = (event) => {
         this.setState({ userHeight: event.target.value });
+        if(event.target.value)
+            this.setState({ emptyHeight: false });
+        else
+            this.setState({ emptyHeight: true });
     }
 
     onNumDaysGoal = (event) => {
@@ -225,11 +264,13 @@ class NewUserData extends Component {
             alertAge,
             underAge,
             alertWeightGoal,
+            alertWeightEmpty,
+            alertEmptyHeight
          } = this.state;
 
         return (
             <div>
-                <Modal show={showModalUserData} centered keyboard={true}> 
+                <Modal show={showModalUserData} onHide={() => {}} centered keyboard={true}> 
                     <Modal.Header>
                         <Modal.Title>Let`s get started!</Modal.Title>
                     </Modal.Header>
@@ -305,7 +346,7 @@ class NewUserData extends Component {
                     </Modal.Footer>
                 </Modal>
 
-                <Modal show={showModalUserGoals} centered keyboard={true}> 
+                <Modal show={showModalUserGoals} onHide={() => {}} centered keyboard={true}> 
                     <Modal.Header>
                         <Modal.Title>A little more about you</Modal.Title>
                     </Modal.Header>
@@ -318,6 +359,11 @@ class NewUserData extends Component {
                                 <Form.Label>What is your current weight? [kg]</Form.Label>
                                 <Form.Control size="sm" onChange={this.onWeightChange}/>
                             </Form.Group>
+                            {
+                                alertWeightEmpty === true
+                                ? <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>Please enter you current weight!</h6>
+                                : ( <div></div> )
+                            }
                             <Form.Group controlId="formDesiredWeight">
                                 <Form.Label>What is your desired weight? [kg]</Form.Label>
                                 <Form.Control size="sm" onChange={this.onWeightGoalChange} />
@@ -332,6 +378,12 @@ class NewUserData extends Component {
                                 <Form.Label>Please insert you height! [cm]</Form.Label>
                                 <Form.Control size="sm" onChange={this.onHeightChange} />
                             </Form.Group>
+                            {
+                                alertEmptyHeight === true
+                                ? <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>
+                                    Please choose your height!</h6>
+                                : (<div></div>)    
+                            }
                             <Form.Group controlId="formTime">
                                 <Form.Label>How fast do you wish you wish to achieve your goal? [days]</Form.Label>
                                 <Form.Control size="sm" onChange={this.onNumDaysGoal} />
