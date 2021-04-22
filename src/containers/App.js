@@ -58,7 +58,9 @@ class App extends Component {
             <Route path="/users" exact render={(props) => (
               <UserProfile {... props} user={this.state.user} />
             )} />
-            <Route path="/users/plans" exact component={ PlanList } />
+            <Route path="/users/plans" exact render={(props) => (
+              <PlanList {... props} user={this.state.user} />
+            )} />
             <Route path="/chooseFood" exact component={ ChooseFood } />
             <Route path="/" render={() => <div>404</div>} />
           </Switch>

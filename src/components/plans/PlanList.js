@@ -12,16 +12,18 @@ import nutritionalValue from '../../common/nutritionConstants';
 
 class PlanList extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             planList : [],
             showPlanDetails: false,
             programChosen: '',
-            proteinPercent: nutritionalValue.PROTEINS,
-            fatsPercent: nutritionalValue.FATS,
-            carbosPercent: nutritionalValue.CARBOHYDRATES,
-            wrongPercents: false
+            proteinPercent: '',
+            fatsPercent: '',
+            carbosPercent: '',
+            wrongPercents: false,
+            activeProgram: false,
+            modifiedNutrients: false
         };
     }
 
@@ -30,15 +32,35 @@ class PlanList extends Component {
                 method: 'get'
             })
             .then(response => response.json())
-            .then(response => this.setState({ planList: response }));
+            .then(response => {
+                this.setState({ planList: response }); 
+            });
     }
 
     handleHide = () => {
-        this.setState({ showPlanDetails: false })
+        this.setState({ showPlanDetails: false });
+        this.setState({ modifiedNutrients: false });
     }
 
-    handleShow = () => {
+    handleShow = (userProgramId) => {
         this.setState({ showPlanDetails: true })
+        fetch(`http://localhost:4400/users/${this.props.user.id}/userInfo`, {
+            method: 'get'
+        })
+        .then(response => response.json())
+        .then(response => {
+            if(response['data'] && (response['data']['programId'] === userProgramId)) {
+                this.setState({ activeProgram: true });
+                this.setState({ proteinPercent: response['data']['proteinsPercent'] });
+                this.setState({ fatsPercent: response['data']['fatsPercent'] });
+                this.setState({ carbosPercent: response['data']['carbohydratesPercent'] });
+            } else {
+                this.setState({ activeProgram: false });
+                this.setState({ proteinPercent: nutritionalValue.PROTEINS });
+                this.setState({ fatsPercent: nutritionalValue.FATS });
+                this.setState({ carbosPercent: nutritionalValue.CARBOHYDRATES });
+            }
+        })
     }
 
     setStateProgramChosen = (id) => {
@@ -46,6 +68,7 @@ class PlanList extends Component {
     }
 
     getProgramDetails = (planList, id) => {
+        
         if(planList) {
             for(let i = 0; i < planList.length; i++)
                 if(planList[i]._id === id)
@@ -55,11 +78,58 @@ class PlanList extends Component {
         return -1;
     }
 
-    checkPercentsToAdd = () => {
+    checkSumAndActivate = () => {
         if(this.state.proteinPercent + this.state.fatsPercent + this.state.carbosPercent !== 100)
             this.setState({ wrongPercents: true })
-        else
+        else {
             this.setState({ wrongPercents: false });
+            fetch(`http://localhost:4400/usersInfo`, {
+                method: 'put',
+                headers: {'Content-type': 'application/json'},
+                body: JSON.stringify({
+                    userId: this.props.user.id,
+                    programId: this.state.programChosen,
+                    carbohydratesPercent: parseInt(this.state.carbosPercent),
+                    fatsPercent: parseInt(this.state.fatsPercent),
+                    proteinsPercent: parseInt(this.state.proteinPercent)
+                })
+            })
+                .then(response => response.json())
+                .then(response => {
+                    if(response && response['statusCode'] && parseInt(response['statusCode']) !== 200)
+                        console.log("ERROR statusCode " + response['statusCode'] + "; errorMessage: " + response['message']);
+                })
+                .catch(error => console.log(error))
+            this.handleHide();
+        }
+    }
+
+    modifyNutrients = () => {
+
+        this.setState({ modifiedNutrients: false });
+        if(this.state.proteinPercent + this.state.fatsPercent + this.state.carbosPercent !== 100) {
+            this.setState({ modifiedNutrients: false });
+            this.setState({ wrongPercents: true });
+        } else {
+            this.setState({ wrongPercents: false });
+            fetch(`http://localhost:4400/usersInfo`, {
+                method: 'put',
+                headers: {'Content-type': 'application/json'},
+                body: JSON.stringify({
+                    userId: this.props.user.id,
+                    carbohydratesPercent: parseInt(this.state.carbosPercent),
+                    fatsPercent: parseInt(this.state.fatsPercent),
+                    proteinsPercent: parseInt(this.state.proteinPercent)
+                })
+            })
+                .then(response => response.json())
+                .then(response => {
+                    this.setState({ modifiedNutrients: true });
+                    if(response && response['statusCode'] && parseInt(response['statusCode']) !== 200) 
+                        console.log("ERROR statusCode " + response['statusCode'] + "; errorMessage: " + response['message']);              
+                })
+                .catch(error => console.log(error))
+        }
     }
     
     onAddCarbos = () => {
@@ -92,6 +162,25 @@ class PlanList extends Component {
             this.setState({ proteinPercent: this.state.proteinPercent - 1});
     }
 
+    disableProgram = () => {
+        fetch(`http://localhost:4400/usersInfo`, {
+            method: 'put',
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify({
+                userId: this.props.user.id,
+                programId: " "
+            })
+        })
+        .then(response => response.json())
+        .then(response => {
+            if(response && response['statusCode'] && parseInt(response['statusCode']) !== 200) 
+                console.log("ERROR statusCode " + response['statusCode'] + "; errorMessage: " + response['message']); 
+        })
+        .catch(error => console.log(error))
+        this.handleHide();
+        this.setState({ activeProgram: false });
+    }
+
     render() {
         
         const { 
@@ -100,7 +189,9 @@ class PlanList extends Component {
             proteinPercent,
             fatsPercent,
             carbosPercent,
-            wrongPercents
+            wrongPercents,
+            activeProgram,
+            modifiedNutrients
         } = this.state;
 
         return (
@@ -123,7 +214,23 @@ class PlanList extends Component {
                     <Row noGutters>
                         <Modal show={this.state.showPlanDetails} onHide={this.handleHide} centered keyboard={true}> 
                             <Modal.Header closeButton>
-                                <h3>{(this.getProgramDetails(planList, programChosen)).name}</h3>
+                                <Container fluid={true} className="p-0">
+                                    <Row noGutters>
+                                        <Col sm="6">
+                                            <h3>{(this.getProgramDetails(planList, programChosen)).name}</h3>
+                                        </Col>
+                                        <Col sm="6"></Col>
+                                    </Row>
+                                    <Row>
+                                        <Col sm="2" style={{'paddingTop': '3%'}}>
+                                            {   
+                                                activeProgram === true ?
+                                                <h6 style={{'color': 'blue'}}>active</h6>
+                                                : (<div></div>)
+                                            }
+                                        </Col>
+                                    </Row>
+                                </Container>
                             </Modal.Header>
                             <Modal.Body>
                                 <Container fluid={true} className="p-0">
@@ -163,12 +270,19 @@ class PlanList extends Component {
                                         </Col>                                       
                                     </Row>
                                     <Row>
-                                        <Col sm="10"></Col>
-                                        <Col sm="2" style={{'textAlign': 'center', 'paddingTop': '3%'}}>
-                                            <Button variant="outline-dark" size="sm" onClick={this.checkPercentsToAdd}>Save</Button>
-                                        </Col>
-                                    </Row>
-                                    <Row>
+                                        <Col sm="7"></Col>
+                                        <Col sm="5" className="modifyNutrientsBtn">
+                                            {
+                                                activeProgram === true ? 
+                                                    <Button variant="outline-dark" size="sm" onClick={this.modifyNutrients}>Modify your nutrients</Button>                                                    
+                                                :(<div></div>)
+                                            }
+                                            {
+                                                modifiedNutrients === true ?
+                                                    <h6 style={{'color': 'blue', 'paddingTop': '3%'}}>Modified!</h6>
+                                                :(<div></div>)
+                                            }
+                                        </Col>                                                 
                                         {
                                             wrongPercents === true ? <h6 style={{'color': 'red'}}>The proteins, carbohydrates and fats must add to 100!</h6>
                                             : (<div></div>)
@@ -177,10 +291,38 @@ class PlanList extends Component {
                                 </Container>
                             </Modal.Body>
                             <Modal.Footer>
-                                <p>o sa apara doar un buton - daca e activat il pot dezactiva (buton dezactivare), altfel buton de activare</p>
-                                <p>il activeaza pe asta, dar daca mai e altceva activ o sa se dezactiveze cand asta se activeaza (pun si un warrning)</p>
-                                <p>button de cancel working plan</p>
-                                <p>button de create new plan</p>
+                                    <Container fluid={true} className="p-0">
+                                        <Row noGutters>
+                                            <Col sm="2" className="btn">
+                                                <Button variant="outline-dark" size="sm" onClick={this.checkSumAndActivate}>
+                                                    {
+                                                        activeProgram === true ?
+                                                            'Reactivate'
+                                                        :(
+                                                            'Activate'
+                                                        )
+                                                    }
+                                                </Button>
+                                            </Col>
+                                            <Col sm="2" className="btn">
+                                                <Button variant="outline-dark" size="sm" onClick={this.handleHide}>
+                                                    Close
+                                                </Button>
+                                            </Col>
+                                            <Col sm="5"></Col>
+                                            <Col sm="3">
+                                                {
+                                                    activeProgram === true ?
+                                                        <Button variant="outline-dark" size="sm" onClick={this.disableProgram}>
+                                                            Disable program
+                                                        </Button> 
+                                                    : (
+                                                        <div></div>
+                                                    )
+                                                }
+                                            </Col>
+                                        </Row>
+                                    </Container>                       
                             </Modal.Footer>
                         </Modal>
                     </Row>

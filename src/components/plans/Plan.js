@@ -28,8 +28,8 @@ class Plan extends Component {
   }
 
   handleClick = () => {
-    this.props.handleShow();
-    this.props.setStateProgramChosen(this.props.id);
+    this.props.setStateProgramChosen(this.props.id)
+    this.props.handleShow(this.props.id)
   }
 
 
