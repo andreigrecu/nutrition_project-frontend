@@ -12,6 +12,7 @@ import About from '../components/about/About';
 import TermsAndConditions from '../components/terms/TermsAndConditions';
 import ChooseFood from '../components/chooseFood/SearchFood';
 import PlanList from '../components/plans/PlanList';
+import ls from 'local-storage';
 
 const initialState = {
   user: {
@@ -31,6 +32,7 @@ class App extends Component {
   }
 
   loadUser = (data) => {
+
     this.setState({
       user: {
         id: data.id,
@@ -40,32 +42,45 @@ class App extends Component {
         firstLogin: data.firstLogin
       }
     })
+
+    const state = {
+      user: {
+        id: data.id,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        firstLogin: data.firstLogin
+      }
+    }
+    ls.set('state', state);
   }
 
   render() {
 
-     return (
-       <BrowserRouter>
-          <Switch>
-            <Route path="/" exact render={(props) => (
-              <WelcomePage {... props} loadUser={this.loadUser} />
-            )} />
-            <Route path="/termsAndConditions" exact component={ TermsAndConditions } />
-            <Route path="/about" exact component={ About } />
-            <Route path="/signin" exact render={(props) => (
-              <SignInPage {... props} loadUser={this.loadUser} />
-            )} /> 
-            <Route path="/users" exact render={(props) => (
-              <UserProfile {... props} user={this.state.user} />
-            )} />
-            <Route path="/users/plans" exact render={(props) => (
-              <PlanList {... props} user={this.state.user} />
-            )} />
-            <Route path="/chooseFood" exact component={ ChooseFood } />
-            <Route path="/" render={() => <div>404</div>} />
-          </Switch>
-       </BrowserRouter>
-    );
+    const state = ls.get('state');
+    
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route path="/" exact render={(props) => (
+            <WelcomePage {... props} loadUser={this.loadUser} />
+          )} />
+          <Route path="/termsAndConditions" exact component={ TermsAndConditions } />
+          <Route path="/about" exact component={ About } />
+          <Route path="/signin" exact render={(props) => (
+            <SignInPage {... props} loadUser={this.loadUser} />
+          )} /> 
+          <Route path="/users" exact render={(props) => (
+            <UserProfile {... props} user={state.user} />
+          )} />
+          <Route path="/users/plans" exact render={(props) => (
+            <PlanList {... props} user={state.user} />
+          )} />
+          <Route path="/chooseFood" exact component={ ChooseFood } />
+          <Route path="/" render={() => <div>404</div>} />
+        </Switch>
+      </BrowserRouter>
+  );
   }
 }
 
