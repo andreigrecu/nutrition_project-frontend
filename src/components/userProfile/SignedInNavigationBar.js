@@ -12,6 +12,10 @@ class SignedInNavigationBar extends Component {
         this.props.history.push('/users/plans');
     }
 
+    changeRouteToUserProfile = () => {
+        this.props.history.push('/users');
+    }
+
     render() {
         return(
             <Container fluid={true} className="p-0">
@@ -20,7 +24,8 @@ class SignedInNavigationBar extends Component {
                         <Navbar bg="dark" variant="dark">
                             <Nav className="mr-auto">
                                 <Nav.Link onClick={this.changeRouteToPlans}>Plans</Nav.Link>
-                            </Nav>
+                                <Nav.Link onClick={this.changeRouteToUserProfile}>Profile</Nav.Link>
+                            </Nav>                              
                             <Nav className="ml-auto">
                                 <Nav.Link>Logo</Nav.Link>
                             </Nav>

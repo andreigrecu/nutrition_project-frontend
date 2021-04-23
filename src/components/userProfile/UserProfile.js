@@ -15,7 +15,7 @@ class UserProfile extends Component {
 
     render() {
         return (       
-            <Container fluid={true} className="userData">
+            <Container fluid={true} className="userData p-0">
                 <Row noGutters>
                     <SignedInNavigationBar />
                 </Row>
@@ -29,7 +29,7 @@ class UserProfile extends Component {
                             <div></div>
                         )
                     }
-                    <DailyCaloriesCounter onRouteChange={() => this.props.history.push('/chooseFood')} />
+                    <DailyCaloriesCounter user={this.props.user} onRouteChange={() => this.props.history.push('/chooseFood')} />
                 </Row>
             </Container>               
         );
