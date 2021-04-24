@@ -3,18 +3,29 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import './DailyCaloriesCounter.css';
+import Button from 'react-bootstrap/Button';
+import PosibilitiesModal from './PosibilitiesModal';
 
 class DailyCaloriesCounter extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            userBMR: 0
+            userBMR: 0,
+            showPosibilitiesModal: false,
         };
+    }
+
+    handlePossibilitiesModalClose = () => {
+        this.setState({ showPosibilitiesModal: false });
     }
 
     addFood = () => {
         this.props.onRouteChange('addFood');
+    }
+
+    popModalPosibilities = () => {
+        this.setState({ showPosibilitiesModal: true });
     }
 
     calculateBMR = (userInfo) => {
@@ -45,11 +56,12 @@ class DailyCaloriesCounter extends Component {
     render() {
         
         const {
-            userBMR
+            userBMR,
+            showPosibilitiesModal
         } = this.state;
 
         return(
-            <Container fluid={true}>
+            <Container fluid={true} className="p-0">
                 <hr></hr>
                 <Row noGutters>
                     <Col sm="4" className="changeMeasureType">
@@ -81,7 +93,20 @@ class DailyCaloriesCounter extends Component {
                     </Col>
                 </Row>
                 <hr></hr>
-                <button onClick={this.addFood}>ceva</button>
+                <Row noGutters>
+                    <Col sm="10"></Col>
+                    <Col sm="2">
+                        <Button onClick={this.popModalPosibilities} style={{'textAlign': 'center'}}>+</Button>
+                    </Col>
+                </Row>
+                {   
+                    showPosibilitiesModal === true ?
+                    <PosibilitiesModal 
+                        showPosibilitiesModal={showPosibilitiesModal}
+                        handlePossibilitiesModalClose={this.handlePossibilitiesModalClose}
+                        setMealType={this.props.setMealType}
+                    /> :(<div></div>)
+                }
             </Container>
         );
     }

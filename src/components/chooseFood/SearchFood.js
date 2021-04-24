@@ -6,6 +6,9 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
+import SignedInNavigationBar from '../userProfile/SignedInNavigationBar';
+import MealTypeBand from './MealTypeBand';
+import QueryType from './QueryType';
 
 class SearchFood extends Component {
 
@@ -15,7 +18,8 @@ class SearchFood extends Component {
             searchedItem: '',
             autocompletedItems: [],
             itemChosen: '',
-            itemChosenNutrients: {}
+            itemChosenNutrients: {},
+            clickedQuery: ''
         };
     }
 
@@ -39,45 +43,53 @@ class SearchFood extends Component {
         })
         .then(response => response.json())
         .then(response => {
-            console.log(response)
             this.setState({ itemChosenNutrients: response['nutrition']['nutrients'] })
         })
     }
 
+    onChangeClickedQuery = (type) => {
+        this.setState({ clickedQuery: type });
+    }
 
     render() {
-        const {
+
+        let {
             autocompletedItems,
             itemChosen,
-            itemChosenNutrients
+            itemChosenNutrients,
+            clickedQuery
         } = this.state;
+
+        if(clickedQuery === "")
+            clickedQuery = 'All';
 
         let test = '';
         if(itemChosenNutrients && itemChosenNutrients[0] && itemChosenNutrients[0]['name'])
             test = itemChosenNutrients[0]['name'];
-
-        console.log(test)
-        
+       
         return (
-            <Container fluid={true}>
+            <Container fluid={true} className="p-0 backgroundImg">
+                <SignedInNavigationBar />
+                <MealTypeBand mealType={this.props.mealType} />
+                <QueryType onChangeClickedQuery={this.onChangeClickedQuery} />
                 <Row noGutters>
                     <Col sm="4"></Col>
                     <Col sm="4">
                         <Form>
                             <Form.Group controlId="searchFood">
-                                <Form.Label>Search for any food or ingredient</Form.Label>
-                                <Form.Control onChange={this.onSearchChange} />
+                                <Form.Label><p style={{'color': 'white'}}>Search for {clickedQuery}</p></Form.Label>
+                                <Form.Control onChange={this.onSearchChange} placeholder="Search"/>
                             </Form.Group>
                         </Form>
                     </Col>
                     <Col sm="4"></Col>
                 </Row>
                 <Row>
-                    <Col sm="3"></Col>
+                    <Col sm="7"></Col>
                     <Col sm="3">
-                        <Button varianta="link" onClick={this.onSubmitSearchItem}>ceva</Button>
+                        <Button varianta="link" onClick={this.onSubmitSearchItem}>Search</Button>
                     </Col>
-                    <Col sm="6"> </Col>
+                    <Col sm="2"> </Col>
                 </Row>
                     {
                         itemChosen === ''

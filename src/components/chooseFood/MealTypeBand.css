@@ -1,0 +1,8 @@
+.mealTypeOnBand {
+    color: white;
+    font-weight: bold;
+}
+
+.backgroundImg {
+    background-image: url('background.jpg');
+}
