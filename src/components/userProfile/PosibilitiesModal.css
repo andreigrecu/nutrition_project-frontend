@@ -1,0 +1,10 @@
+.meals {
+    font-size: 1.7em;
+    padding-bottom: 5%;
+}
+
+.mealType {
+    font-weight: none;
+    cursor: pointer;
+    padding-bottom: 3%;
+}

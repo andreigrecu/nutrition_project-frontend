@@ -21,7 +21,8 @@ const initialState = {
     lastName: '',
     email: '',
     firstLogin: ''
-  }
+  },
+  mealType: ''
 }
 
 class App extends Component {
@@ -29,6 +30,11 @@ class App extends Component {
   constructor() {
     super();
     this.state = initialState;
+  }
+
+  setMealType = (meal) => {
+    this.setState({ mealType: meal });
+    ls.set('mealType', meal);
   }
 
   loadUser = (data) => {
@@ -58,6 +64,7 @@ class App extends Component {
   render() {
 
     const state = ls.get('state');
+    const mealType = ls.get('mealType');
     
     return (
       <BrowserRouter>
@@ -71,12 +78,14 @@ class App extends Component {
             <SignInPage {... props} loadUser={this.loadUser} />
           )} /> 
           <Route path="/users" exact render={(props) => (
-            <UserProfile {... props} user={state.user} />
+            <UserProfile {... props} user={state.user} setMealType={this.setMealType} />
           )} />
           <Route path="/users/plans" exact render={(props) => (
             <PlanList {... props} user={state.user} />
           )} />
-          <Route path="/chooseFood" exact component={ ChooseFood } />
+          <Route path="/chooseFood" exact render={(props) => (
+            <ChooseFood {... props} mealType={mealType} />
+          )} />
           <Route path="/" render={() => <div>404</div>} />
         </Switch>
       </BrowserRouter>

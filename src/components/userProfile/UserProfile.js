@@ -29,7 +29,11 @@ class UserProfile extends Component {
                             <div></div>
                         )
                     }
-                    <DailyCaloriesCounter user={this.props.user} onRouteChange={() => this.props.history.push('/chooseFood')} />
+                    <DailyCaloriesCounter 
+                        user={this.props.user} 
+                        onRouteChange={() => this.props.history.push('/chooseFood')}
+                        setMealType={this.props.setMealType}
+                     />
                 </Row>
             </Container>               
         );
