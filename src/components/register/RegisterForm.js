@@ -118,6 +118,7 @@ class RegisterForm extends Component {
                                     this.props.history.push('/users');
                                 }
                             })
+
                     } else {
                         return;
                     }

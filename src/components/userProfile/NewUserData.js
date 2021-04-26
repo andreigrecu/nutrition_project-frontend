@@ -46,7 +46,7 @@ class NewUserData extends Component {
 
             alertWeightGoal: false,
             alertWeightEmpty: false,
-            alertEmptyHeight: false
+            alertEmptyHeight: false,
         };
     }
     
@@ -112,6 +112,19 @@ class NewUserData extends Component {
         
     }
 
+
+    calculateBMR = (userInfo) => {
+
+        const sameBMR =  10 * userInfo['data']['weight'] + 
+            6.25 * userInfo['data']['height'] - 5 * userInfo['data']['age'];
+
+        if(userInfo['data']['gender'] === 'male') {
+            return (sameBMR + 5);
+        } else if(userInfo['data']['gender'] === 'female') {
+            return (sameBMR - 161);
+        }
+    }
+
     handleSubmitSecondForm = () => {
 
         let gender = "";
@@ -163,13 +176,6 @@ class NewUserData extends Component {
                 method: 'post',
                 headers: {'Content-type': 'application/json'},
                 body: JSON.stringify(
-                    // age: this.state.age,
-                    // height: this.state.userHeight,
-                    // weight: this.state.userWeight,
-                    // weightGoal: this.state.userWeightGoal,
-                    // numberOfDaysGoal: this.state.num_of_days_goal,
-                    // userId: this.props.user.id,
-                    // gender: gender
                     userInfo
                 )
             })
@@ -180,6 +186,26 @@ class NewUserData extends Component {
                         return;
                     }
                     this.setState({ showModalUserGoals: false });
+                    this.props.loadUser({
+                        id: this.props.user.id,
+                        firstName: this.props.user.firstName,
+                        lastName: this.props.user.lastName,
+                        email: this.props.user.email,
+                        firstLogin: false
+                    })
+                    fetch(`http://localhost:4400/users/${this.props.user.id}/userInfo`, {
+                            method: 'get'
+                    })
+                        .then(response => response.json())
+                        .then(response => {
+                            if(response['statusCode'] && parseInt(response['statusCode']) !== 200)
+                                console.log('ERROR: ' + response['message'] + ' of status code: ' + response['statusCode']); 
+                            else {
+                                let BMR = this.calculateBMR(response);
+                                this.props.setUserBMR(BMR);
+                            }
+                        })
+                        .catch(error => console.log(error))
                 })
                 .catch(err => console.log("ERROR: " + err))
         }

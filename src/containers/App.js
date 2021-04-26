@@ -22,7 +22,8 @@ const initialState = {
     email: '',
     firstLogin: ''
   },
-  mealType: ''
+  mealType: '',
+  BMR: 0
 }
 
 class App extends Component {
@@ -37,17 +38,12 @@ class App extends Component {
     ls.set('mealType', meal);
   }
 
-  loadUser = (data) => {
+  setUserBMR = (BMR) => {
+    ls.set('userBMR', BMR);
+    this.setState({ BMR: BMR });
+  }
 
-    this.setState({
-      user: {
-        id: data.id,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        firstLogin: data.firstLogin
-      }
-    })
+  loadUser = (data) => {
 
     const state = {
       user: {
@@ -58,15 +54,19 @@ class App extends Component {
         firstLogin: data.firstLogin
       }
     }
+
     ls.set('state', state);
+    this.setState({user: state.user});
   }
 
   render() {
 
-    const state = ls.get('state');
+    let state = ls.get('state');
     const mealType = ls.get('mealType');
+    const userBMR = ls.get('userBMR');
     
     return (
+
       <BrowserRouter>
         <Switch>
           <Route path="/" exact render={(props) => (
@@ -78,7 +78,13 @@ class App extends Component {
             <SignInPage {... props} loadUser={this.loadUser} />
           )} /> 
           <Route path="/users" exact render={(props) => (
-            <UserProfile {... props} user={state.user} setMealType={this.setMealType} />
+            <UserProfile {... props}
+              userBMR={userBMR} 
+              user={state.user} 
+              loadUser={this.loadUser} 
+              setMealType={this.setMealType} 
+              setUserBMR={this.setUserBMR} 
+            />
           )} />
           <Route path="/users/plans" exact render={(props) => (
             <PlanList {... props} user={state.user} />
