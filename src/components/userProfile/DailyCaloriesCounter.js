@@ -40,25 +40,30 @@ class DailyCaloriesCounter extends Component {
     }
 
     componentDidMount() {
-        fetch(`http://localhost:4400/users/${this.props.user.id}/userInfo`, {
-                method: 'get'
-        })
-            .then(response => response.json())
-            .then(response => {
-                if(response['statusCode'] && parseInt(response['statusCode']) !== 200)
-                    console.log('ERROR: ' + response['message'] + ' of status code: ' + response['statusCode']); 
-                else
-                    this.calculateBMR(response);
+        
+        if(this.props.user.firstLogin === false) {
+            fetch(`http://localhost:4400/users/${this.props.user.id}/userInfo`, {
+                    method: 'get'
             })
-            .catch(error => console.log(error))
+                .then(response => response.json())
+                .then(response => {
+                    if(response['statusCode'] && parseInt(response['statusCode']) !== 200)
+                        console.log('ERROR: ' + response['message'] + ' of status code: ' + response['statusCode']); 
+                    else {
+                        this.calculateBMR(response);
+                        this.props.setUserBMR(this.state.userBMR);
+                    }
+                })
+                .catch(error => console.log(error))
+        }
     }
 
     render() {
         
         const {
-            userBMR,
             showPosibilitiesModal
         } = this.state;
+
 
         return(
             <Container fluid={true} className="p-0">
@@ -71,7 +76,12 @@ class DailyCaloriesCounter extends Component {
                 </Row>
                 <Row noGutters>
                     <Col sm="2" className="align">
-                        <div>{userBMR.toFixed()}</div>
+                        {
+                            this.props.user.firstLogin === true ?
+                            <div>0</div> : (
+                            <div>{this.props.userBMR.toFixed()}</div>
+                            )
+                        }                       
                         <div className="counterText">Goal</div>
                     </Col>
                     <Col sm="1" className="align">
