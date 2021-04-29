@@ -15,7 +15,6 @@ class QueryType extends Component {
             clickedIngredients: false,
             clickedGroceries: false,
             clickedMenuItems: false,
-            clicked: ''
         };
     }
 
@@ -25,6 +24,7 @@ class QueryType extends Component {
         this.setState({ clickedMenuItems: false });
         this.setState({ clickedAll: true });
         this.props.onChangeClickedQuery(foodQuery.ALL);
+        this.props.onChoiceButtonClick();
     }
 
     onIngredientsClick = () => {
@@ -33,6 +33,7 @@ class QueryType extends Component {
         this.setState({ clickedMenuItems: false });
         this.setState({ clickedIngredients: true });
         this.props.onChangeClickedQuery(foodQuery.INGREDIENTS);
+        this.props.onChoiceButtonClick();
     }
 
     onGroceryClick = () => {
@@ -41,6 +42,7 @@ class QueryType extends Component {
         this.setState({ clickedMenuItems: false });
         this.setState({ clickedGroceries: true });
         this.props.onChangeClickedQuery(foodQuery.GROCERY_PRODUCTS);
+        this.props.onChoiceButtonClick();
     }
 
     onMenuItemsClick = () => {
@@ -49,6 +51,7 @@ class QueryType extends Component {
         this.setState({ clickedGroceries: false });
         this.setState({ clickedMenuItems: true });
         this.props.onChangeClickedQuery(foodQuery.MENU_ITEMS);
+        this.props.onChoiceButtonClick();
     }
 
     render() {
