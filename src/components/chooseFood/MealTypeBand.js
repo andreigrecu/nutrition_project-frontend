@@ -17,7 +17,7 @@ class MealTypeBand extends Component {
         return(
             <Container fluid={true} className="p-0">
                 <Row noGutters>
-                    <Col sm="12" className="backgroundImg">
+                    <Col sm="12">
                         <Navbar>
                             <Nav className="m-auto">
                                 <h3 className="mealTypeOnBand">{this.props.mealType.toUpperCase()}</h3>
