@@ -4,7 +4,7 @@ const spoonacularQueries = {
     GROCERIES: 'https://api.spoonacular.com/food/products/search?query=',
     MENU_ITEMS: 'https://api.spoonacular.com/food/menuItems/search?query=',
     OTHER: 'https://api.spoonacular.com/food/search?query=',
-    apiKey: 'apiKey=edc51a73fafe413298abeccb540eb9f0'
+    apiKey: 'apiKey=8b6a5e77f69a435687437044f36c9c0b'
 }
 
 export default spoonacularQueries;

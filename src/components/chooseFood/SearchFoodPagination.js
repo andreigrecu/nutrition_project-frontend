@@ -14,7 +14,7 @@ class SearchFoodPagination extends Component {
     componentDidMount() {
         window.scrollTo(0, 0)
     }
-    
+
     render() {
         
         let items = [];
@@ -42,7 +42,6 @@ class SearchFoodPagination extends Component {
             } 
         />)
 
-        //aici fa o logica decenta
         for(let number = 1; number <= 10; number++) {
             if(number === 1 || number === 2 || number === 8 || number === 9 || number === 10)
                 items.push(
@@ -57,7 +56,7 @@ class SearchFoodPagination extends Component {
                         {number}
                     </Pagination.Item>
                 )
-
+            
             if(number === 4)
                 items.push(<Pagination.Ellipsis />)
                 
@@ -74,7 +73,7 @@ class SearchFoodPagination extends Component {
                         {number}
                     </Pagination.Item>
                 )
-                if(number !== 7)
+                if(number !== 7 && number !== 3)
                     items.push(<Pagination.Ellipsis />)
             }
 
