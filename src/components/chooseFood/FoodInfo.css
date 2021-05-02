@@ -1,0 +1,10 @@
+.footer-links{
+	margin: 5px 0 3px;
+}
+
+.footer-links h6{
+	display:inline-block;
+	line-height: 1.8;
+	text-decoration: none;
+	color:  inherit;
+}

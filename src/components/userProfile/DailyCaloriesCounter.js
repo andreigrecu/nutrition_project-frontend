@@ -79,7 +79,9 @@ class DailyCaloriesCounter extends Component {
                         {
                             this.props.user.firstLogin === true ?
                             <div>0</div> : (
-                            <div>{this.props.userBMR.toFixed()}</div>
+                                this.props.userBMR ?
+                                    <div>{this.props.userBMR.toFixed()}</div>
+                                :(<div>0</div>)
                             )
                         }                       
                         <div className="counterText">Goal</div>
