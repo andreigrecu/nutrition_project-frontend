@@ -90,7 +90,10 @@ class App extends Component {
             <PlanList {... props} user={state.user} />
           )} />
           <Route path="/chooseFood" exact render={(props) => (
-            <ChooseFood {... props} mealType={mealType} />
+            <ChooseFood {... props} 
+              mealType={mealType}
+              user={state.user} 
+            />
           )} />
           <Route path="/" render={() => <div>404</div>} />
         </Switch>

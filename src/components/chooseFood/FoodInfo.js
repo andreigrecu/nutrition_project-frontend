@@ -45,6 +45,75 @@ class FoodInfo extends Component {
         this.setState({ numberOfServings:  this.state.numberOfServings + 1 });
     }
 
+    addFoodToCart = () => {
+
+        let smallerDetails = {};
+        Object.assign(smallerDetails, { 
+            id: this.props.itemsDetails.id,
+            title: this.props.itemsDetails.title || null,
+            name: this.props.itemsDetails.name || null,
+            price: this.props.itemsDetails.price || 0,
+            badges: this.props.itemsDetails.badges,
+            description: this.props.itemsDetails.description,
+            images: this.props.itemsDetails.images,
+            ingredientList: this.props.itemsDetails.ingredientList,
+            ingredients: this.props.itemsDetails.ingredients,
+            nutrition: this.props.itemsDetails.nutrition,
+            serving_size: this.props.itemsDetails.serving_size,
+        })
+
+        let food;
+        switch(this.props.mealType) {
+            case 'breakfast':
+                food = {
+                    breakfastItem: smallerDetails,
+                    lunchItem: "",
+                    dinnerItem: "",
+                    snackItem: ""
+                }
+                break;
+            case 'lunch':
+                food = {
+                    breakfastItem: "",
+                    lunchItem: smallerDetails,
+                    dinnerItem: "",
+                    snackItem: ""
+                }
+                break;
+            case 'dinner':
+                food = {
+                    breakfastItem: "",
+                    lunchItem: "",
+                    dinnerItem: smallerDetails,
+                    snackItem: ""
+                }
+                break;
+            case 'snacks':
+                food = {
+                    breakfastItem: "",
+                    lunchItem: "",
+                    dinnerItem: "",
+                    snackItem: smallerDetails
+                }
+                break;
+            default:
+                console.log('ERROR at adding to food to user in MongoDB');
+        }
+
+        fetch(`http://localhost:4400/users/${this.props.user.id}/addFoodItem`, {
+            method: 'put',
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify(food)
+        })
+            .then(response => response.json())
+            .then(response => {
+                if(response['meta'] && parseInt(response['meta']['statusCode']) !== 200)
+                    console.log("ERROR: " + response['message']['_general'] + " of status code: " + response['meta']['statusCode']);
+                this.props.handleCloseFoodInfoModal();
+            })
+            .catch(error => console.log(error))
+    }
+
     render() {
 
         const {
@@ -226,8 +295,7 @@ class FoodInfo extends Component {
                                 <Button 
                                     variant="primary" 
                                     onClick={() => {
-                                        console.log(this.props.itemsDetails)
-                                        console.log(this.props.mealType)
+                                        this.addFoodToCart();
                                     }}>
                                         Add To Your Cart
                                 </Button>

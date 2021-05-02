@@ -206,7 +206,7 @@ class SearchFood extends Component {
 
     onSubmitSearchItem = () => {
 
-        this.setState({ autocompletedItems: [], itemChosen: '', itemClicked: false, nothingFound: false });
+        this.setState({ autocompletedItems: [], itemChosen: '', itemClicked: false, nothingFound: false, showHistory: false });
         let url;
         switch(this.state.clickedQuery) {
             case 'All':
@@ -329,7 +329,9 @@ class SearchFood extends Component {
     handleCloseFoodInfoModal = () => {
         this.setState({ nrCalories: 0, nrCarbohydrates: 0, nrFats: 0, nrProteins: 0, 
             showFoodInfoModal: false, showHistory: true, nothingFound: false,
-            autocompletedItems: [], itemChosen: '' });
+            itemChosen: '' });
+        if(this.state.clickedQuery === 'All')
+            this.setState({ itemName: 'name' });
     }
 
     render() {
@@ -365,6 +367,7 @@ class SearchFood extends Component {
                     nrFats={nrFats}
                     nrProteins={nrProteins}
                     mealType={this.props.mealType}
+                    user={this.props.user}
                 />
                 <SignedInNavigationBar />
                 <MealTypeBand 
