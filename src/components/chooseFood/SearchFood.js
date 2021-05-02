@@ -19,18 +19,43 @@ class SearchFood extends Component {
     constructor(props) {
         super(props);
         this.state = {
+
+            //input from search bar
             searchedItem: '',
+
+            //items found after search was clicked
             autocompletedItems: [],
             itemChosen: '',
+
+            //the query to be done
+            //it is set on All/Ingredients/Menu Items/
+            //or Grocery Products click
             clickedQuery: 'All',
-            itemName: 'title',
+
+            //items that come from spoonacular have title/name
+            //here I have the title/name state in order to have
+            //the food title/name
+            itemName: '',
+
+            //the item chosen from autocompletedItems[]
+            //details
             itemsDetails: '',
-            itemClicked: false
+
+
+            itemClicked: false,
+            showFoodInfoModal: false,
+
+            nrCalories: 0,
+            nrCarbohydrates: 0,
+            nrFats: 0,
+            nrProteins: 0,
+
+            showHistory: true,
+            nothingFound: true
         };
         ls.set('offset', 0);
         ls.set('active', 1);
     }
-
 
     setOffset = (offset) => {
         ls.set('offset', offset);
@@ -38,16 +63,52 @@ class SearchFood extends Component {
     }
 
     onChoiceButtonClick = () => {
-        this.setState({ autocompletedItems: [] });
+        this.setState({ autocompletedItems: [], nothingFound: false, showHistory: true });
     }
 
     onSearchChange = (event) => {
         this.setState({ searchedItem: event.target.value });
     }
 
+    extractBaseNutrients = (details) => {
+
+        if(details && details.nutrition && details.nutrition.nutrients) {
+            for(let nutrient = 0; nutrient < details.nutrition.nutrients.length; nutrient++) {
+                switch(details.nutrition.nutrients[nutrient]['name']) {
+                    case 'Calories':
+                        this.setState((state) => {
+                             return { nrCalories: state.nrCalories + details.nutrition.nutrients[nutrient]['amount'] }
+                        });
+                        break;
+                    case 'Carbohydrates':
+                        this.setState((state) => {
+                            return { nrCarbohydrates: state.nrCarbohydrates + details.nutrition.nutrients[nutrient]['amount'] }
+                        });
+                        break;
+                    case 'Fat':
+                        this.setState((state) => {
+                            return { nrFats: state.nrFats + details.nutrition.nutrients[nutrient]['amount'] }
+                        });
+                        break;
+                    case 'Proteins':
+                        this.setState((state) => { 
+                            return { nrProteins: state.nrProteins + details.nutrition.nutrients[nutrient]['amount'] }
+                        });
+                        break;
+                    case 'Protein':
+                        this.setState((state) => {
+                            return { nrProteins: this.state.nrProteins + details.nutrition.nutrients[nutrient]['amount'] }
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
     getChosenItemData = (id, type) => {
 
-        console.log("TYPE", type)
         this.setState({ itemsDetails: '', itemClicked: true });
         switch(this.state.clickedQuery) {
             case 'All':
@@ -59,7 +120,10 @@ class SearchFood extends Component {
                                     method: 'get'
                                 })
                                     .then(response => response.json())
-                                    .then(response => this.setState({ itemsDetails: response, itemName: 'title' }))
+                                    .then(response => {
+                                        this.extractBaseNutrients(response);
+                                        this.setState({ itemsDetails: response, itemName: 'name', showFoodInfoModal: true });
+                                    })
                                     .catch(error => console.log(error))
                                 break;
                             }
@@ -69,7 +133,10 @@ class SearchFood extends Component {
                                     method: 'get'
                                 })
                                     .then(response =>  response.json())
-                                    .then(response => { this.setState({ itemsDetails: response, itemName: 'title' })})
+                                    .then(response => {
+                                        this.extractBaseNutrients(response); 
+                                        this.setState({ itemsDetails: response, itemName: 'title', showFoodInfoModal: true });
+                                    })
                                     .catch(error => console.log(error))
                                 break;
                             }
@@ -79,7 +146,10 @@ class SearchFood extends Component {
                                     method: 'get'
                                 })
                                     .then(response => response.json())
-                                    .then(response => this.setState({ itemsDetails: response, itemName: 'name' }))
+                                    .then(response => {
+                                        this.extractBaseNutrients(response); 
+                                        this.setState({ itemsDetails: response, itemName: 'title', showFoodInfoModal: true });
+                                    })
                                     .catch(error => console.log(error))
                                 break;
                             }
@@ -94,7 +164,10 @@ class SearchFood extends Component {
                         method: 'get'
                     })
                         .then(response => response.json())
-                        .then(response => this.setState({ itemsDetails: response, itemName: 'title' }))
+                        .then(response => {
+                            this.extractBaseNutrients(response); 
+                            this.setState({ itemsDetails: response, itemName: 'name', showFoodInfoModal: true });
+                        })
                         .catch(error => console.log(error))
                     break;
                 }
@@ -104,7 +177,10 @@ class SearchFood extends Component {
                         method: 'get'
                     })
                         .then(response =>  response.json())
-                        .then(response => {this.setState({ itemsDetails: response, itemName: 'title' })})
+                        .then(response => {
+                            this.extractBaseNutrients(response); 
+                            this.setState({ itemsDetails: response, itemName: 'title', showFoodInfoModal: true });
+                        })
                         .catch(error => console.log(error))
                     break;
                 }
@@ -114,7 +190,10 @@ class SearchFood extends Component {
                         method: 'get'
                     })
                         .then(response => response.json())
-                        .then(response => this.setState({ itemsDetails: response, itemName: 'name' }))
+                        .then(response => {
+                            this.extractBaseNutrients(response); 
+                            this.setState({ itemsDetails: response, itemName: 'title', showFoodInfoModal: true })
+                        })
                         .catch(error => console.log(error))
                     break;
                 }
@@ -123,12 +202,11 @@ class SearchFood extends Component {
                     console.log("ENTERED DEFAULT ON GETTING MORE DATA FROM A PRODUCT");
                 }
         }
-
     }
 
     onSubmitSearchItem = () => {
 
-        this.setState({ autocompletedItems: [], itemChosen: '', itemClicked: false });
+        this.setState({ autocompletedItems: [], itemChosen: '', itemClicked: false, nothingFound: false });
         let url;
         switch(this.state.clickedQuery) {
             case 'All':
@@ -148,7 +226,7 @@ class SearchFood extends Component {
         }
 
 
-        let number=4;
+        let number=1;
         let offset=ls.get('offset');
         let autocompleted = [];
 
@@ -160,7 +238,6 @@ class SearchFood extends Component {
                     })
                         .then(response => response.json())
                         .then(response => {
-                            console.log(response)
 
                             if(response && response['searchResults']) {
                                 for(let item = 0; item < response['searchResults'][1]['results'].length; item++) {
@@ -185,7 +262,9 @@ class SearchFood extends Component {
                                 }
                             }
 
-                            this.setState({ autocompletedItems: autocompleted, itemName: 'name' });
+                            this.setState({ autocompletedItems: autocompleted, itemName: 'name', showHistory: false });
+                            if(autocompleted.length === 0)
+                                this.setState({ nothingFound: true });
                         })
                         .catch(error => console.log(error))
                     break;
@@ -197,7 +276,9 @@ class SearchFood extends Component {
                     })
                         .then(response => response.json())
                         .then(response => {
-                            this.setState({ autocompletedItems: response['results'], itemName: 'name' });
+                            this.setState({ autocompletedItems: response['results'], itemName: 'name', showHistory: false });
+                            if(response['results'].length === 0)
+                                this.setState({ nothingFound: true });
                         })
                         .catch(error => console.log(error))
                     break;
@@ -209,7 +290,9 @@ class SearchFood extends Component {
                     })
                         .then(response => response.json())
                         .then(response => {
-                            this.setState({ autocompletedItems: response['products'], itemName: 'title' });
+                            this.setState({ autocompletedItems: response['products'], itemName: 'title', showHistory: false });
+                            if(response['products'].length === 0)
+                                this.setState({ nothingFound: true });
                         })
                         .catch(error => console.log(error))
 
@@ -222,7 +305,9 @@ class SearchFood extends Component {
                     })
                         .then(response => response.json())
                         .then(response => {
-                            this.setState({ autocompletedItems: response['menuItems'], itemName: 'title' });
+                            this.setState({ autocompletedItems: response['menuItems'], itemName: 'title', showHistory: false });
+                            if(response['menuItems'].length === 0)
+                                this.setState({ nothingFound: true });
                         })
                         .catch(error => console.log(error))
                     break;
@@ -233,12 +318,18 @@ class SearchFood extends Component {
                     this.setState({ autocompleteitems: [], itemName: '', itemsDetails: [] });
                 }
         }
-
     }
 
 
     onChangeClickedQuery = (type) => {
+        ls.set('active', 1);
         this.setState({ clickedQuery: type });
+    }
+
+    handleCloseFoodInfoModal = () => {
+        this.setState({ nrCalories: 0, nrCarbohydrates: 0, nrFats: 0, nrProteins: 0, 
+            showFoodInfoModal: false, showHistory: true, nothingFound: false,
+            autocompletedItems: [], itemChosen: '' });
     }
 
     render() {
@@ -248,22 +339,41 @@ class SearchFood extends Component {
             itemChosen,
             clickedQuery,
             itemName,
+            itemClicked,
             itemsDetails,
-            itemClicked
+            showFoodInfoModal,
+            nrCalories,
+            nrCarbohydrates,
+            nrFats,
+            nrProteins,
+            showHistory,
+            nothingFound
         } = this.state;
 
-        console.log("ITEMS", autocompletedItems);
-        console.log("details", itemsDetails)
-        
         if(clickedQuery === "") {
             clickedQuery = 'All';
         }
 
         return (
             <Container fluid={true} className="p-0 backgroundImg">
+                <FoodInfo 
+                    showFoodInfoModal={showFoodInfoModal} 
+                    handleCloseFoodInfoModal={this.handleCloseFoodInfoModal} 
+                    itemsDetails={itemsDetails}
+                    nrCalories={nrCalories}
+                    nrCarbohydrates={nrCarbohydrates}
+                    nrFats={nrFats}
+                    nrProteins={nrProteins}
+                    mealType={this.props.mealType}
+                />
                 <SignedInNavigationBar />
-                <MealTypeBand mealType={this.props.mealType} />
-                <QueryType onChangeClickedQuery={this.onChangeClickedQuery} onChoiceButtonClick={this.onChoiceButtonClick} />
+                <MealTypeBand 
+                    mealType={this.props.mealType} 
+                />
+                <QueryType 
+                    onChangeClickedQuery={this.onChangeClickedQuery} 
+                    onChoiceButtonClick={this.onChoiceButtonClick} 
+                />
                 <Row noGutters>
                     <Col sm="4"></Col>
                     <Col sm="4">
@@ -279,7 +389,10 @@ class SearchFood extends Component {
                 <Row style={{'paddingBottom': '5%'}} noGutters>
                     <Col sm="4"></Col>
                     <Col sm="2">
-                        <Button varianta="link" onClick={this.onSubmitSearchItem}>Search</Button>
+                        <Button varianta="link" 
+                            onClick={this.onSubmitSearchItem}>
+                                Search
+                        </Button>
                     </Col>
                     <Col sm="6"> </Col>
                 </Row>
@@ -293,12 +406,14 @@ class SearchFood extends Component {
                                 {
                                     autocompletedItems && autocompletedItems.length !== 0
                                     ?
-                                        autocompletedItems.map(autocompleteItem => (
+                                        autocompletedItems.map((autocompleteItem, index)=> (
                                         
-                                            <ListGroup.Item key={'0' + autocompleteItem.id} onClick={() => {
-                                                this.setState({ itemChosen: autocompleteItem[{itemName}] })
-                                                this.getChosenItemData(autocompleteItem['id'], autocompleteItem['type']);
-                                            }
+                                            <ListGroup.Item 
+                                                key={`index-${index}`} 
+                                                onClick={() => {
+                                                    this.setState({ itemChosen: autocompleteItem[{itemName}] })
+                                                    this.getChosenItemData(autocompleteItem['id'], autocompleteItem['type']);
+                                                }
                                             }>
                                                 <Container fluid={true} className="p-0">
                                                     <Row noGutters>
@@ -321,7 +436,24 @@ class SearchFood extends Component {
                                                 
                                         ))
                                     :(
-                                        <div></div>
+                                         <Container fluid={true} className="p-0">
+                                             <Row noGutters>
+                                                 <Col sm="4"></Col>
+                                                 <Col sm="4">
+                                                     {
+                                                        showHistory === false && nothingFound === true ?
+                                                        <h3 style={{'color': 'white', 'textAlign': 'center'}}>No Items Found</h3>
+                                                        : (<div></div>)
+                                                     }
+                                                     {
+                                                         showHistory === true ?
+                                                         <h3 style={{'color': 'white', 'textAlign': 'center'}}>History</h3>
+                                                         :(<div></div>)
+                                                     }
+                                                 </Col>
+                                                 <Col sm="4"></Col>
+                                             </Row>
+                                         </Container>
                                     )
                                 }
                                 </ListGroup>
@@ -344,8 +476,8 @@ class SearchFood extends Component {
                         <Col sm="4"></Col>
                     </Row>
                     {
-                        !(autocompletedItems && autocompletedItems.length !== 0) || itemClicked === true ?
-                        <Row style={{'paddingTop': '30%'}}></Row> :(<div></div>)
+                        (!(autocompletedItems && autocompletedItems.length !== 0) || itemClicked === true) &&
+                        <Row style={{'paddingTop': '30%'}}></Row>
                     }
             </Container>
         )
