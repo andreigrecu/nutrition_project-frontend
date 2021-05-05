@@ -471,9 +471,8 @@ class SearchFood extends Component {
                         <Col sm="4"></Col>
                         <Col sm="4" className="d-flex justify-content-center">
                         {
-                            autocompletedItems && autocompletedItems.length !== 0 && itemClicked === false ?
+                            autocompletedItems && autocompletedItems.length !== 0 && itemChosen === '' &&
                             <SearchFoodPagination setOffset={this.setOffset} />
-                            : (<div></div>)
                         }
                         </Col>
                         <Col sm="4"></Col>
