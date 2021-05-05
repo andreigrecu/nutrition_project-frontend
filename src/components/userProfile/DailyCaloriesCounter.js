@@ -64,7 +64,7 @@ class DailyCaloriesCounter extends Component {
             showPosibilitiesModal
         } = this.state;
 
-
+        const diff = this.props.userBMR.toFixed() - this.props.caloriesStatus;
         return(
             <Container fluid={true} className="p-0">
                 <hr></hr>
@@ -90,7 +90,7 @@ class DailyCaloriesCounter extends Component {
                         <div>-</div>
                     </Col>
                     <Col sm="2" className="align">
-                        <div>311</div>
+                        <div>{this.props.caloriesStatus}</div>
                         <div className="counterText">Food</div>
                     </Col>
                     <Col sm="1" className="align">+</Col>
@@ -100,7 +100,20 @@ class DailyCaloriesCounter extends Component {
                     </Col>
                     <Col sm="1" className="align">=</Col>
                     <Col sm="2" className="align">
-                        <div>1839</div>
+                        {
+                            this.props.user.firstLogin === true ?
+                            <div>{0 - this.props.caloriesStatus}</div> : (
+                                this.props.userBMR ?
+                                    diff < 0 ?
+                                    <div style={{'color': 'red'}}>{diff}</div> :(
+                                        diff < 500 ?
+                                        <div style={{'color': 'orange'}}>{diff}</div> :(
+                                            <div>{diff}</div>
+                                        )
+                                    )
+                                :(<div>{0 - this.props.caloriesStatus}</div>)
+                            )
+                        }                     
                         <div className="counterText">Total</div>
                     </Col>
                 </Row>
