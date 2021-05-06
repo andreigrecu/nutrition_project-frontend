@@ -32,27 +32,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 class FoodInfo extends Component {
     constructor(props) {
         super(props)
-        this.state={
-            numberOfServings: 1,
-            servingModal: false
-        };
-    }
-
-    onSubstractNumberOfServings = () => {
-        if(this.state.numberOfServings > 1)
-            this.setState((state) => {
-                return{ numberOfServings: state.numberOfServings - 1}
-        });
-    }
-
-    onAddNumberOfServings = () => {
-        this.setState((state) => {
-            return { numberOfServings: state.numberOfServings + 1 }
-        });
-    }
-
-    setNumberOfServings = (numberOfServings) => {
-        this.setState({ numberOfServings: numberOfServings, servingModal: false });
+        this.state={};
     }
 
     addFoodToCart = () => {
@@ -70,7 +50,7 @@ class FoodInfo extends Component {
             ingredients: this.props.itemsDetails.ingredients,
             nutrition: this.props.itemsDetails.nutrition,
             serving_size: this.props.itemsDetails.serving_size,
-            chosen_serving_size: this.state.numberOfServings
+            chosen_serving_size: this.props.numberOfServings
         })
 
         let food;
@@ -125,20 +105,12 @@ class FoodInfo extends Component {
             .catch(error => console.log(error))
     }
 
-    showServingModal = () => {
-        this.setState({ servingModal: true });
-    }
-
-    hideServingModal = () => {
-        this.setState({ servingModal: false });
-    }
-
     render() {
 
         const {
             numberOfServings,
             servingModal
-        } = this.state;
+        } = this.props;
 
         const dataChart = [
             { name: 'Carbohydrates', value: this.props.nrCarbohydrates },
@@ -163,8 +135,8 @@ class FoodInfo extends Component {
             <div>
                 <ServingModal 
                     servingModal={servingModal}
-                    hideServingModal={this.hideServingModal}
-                    setNumberOfServings={this.setNumberOfServings}
+                    hideServingModal={this.props.hideServingModal}
+                    setNumberOfServings={this.props.setNumberOfServings}
                 />
                 <Modal show={this.props.showFoodInfoModal} onHide={this.props.handleCloseFoodInfoModal} centered keyboard={true}> 
                     <Modal.Header closeButton>
@@ -203,19 +175,19 @@ class FoodInfo extends Component {
                                                 <Button 
                                                     variant="secondary" 
                                                     className="mr-2" 
-                                                    onClick={this.onSubstractNumberOfServings}>
+                                                    onClick={this.props.onSubstractNumberOfServings}>
                                                 -
                                                 </Button>
                                                 <Button 
                                                     variant="secondary" 
                                                     className="mr-2" 
-                                                    onClick={this.showServingModal}>
+                                                    onClick={this.props.showServingModal}>
                                                 {numberOfServings}
                                                 </Button>
                                                 <Button 
                                                     variant="secondary" 
                                                     className="mr-2" 
-                                                    onClick={this.onAddNumberOfServings}>
+                                                    onClick={this.props.onAddNumberOfServings}>
                                                 +
                                                 </Button>
                                             </ButtonGroup>
