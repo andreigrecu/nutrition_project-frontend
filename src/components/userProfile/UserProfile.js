@@ -23,10 +23,8 @@ class UserProfile extends Component {
             .then(response => {
                 if(response['statusCode'] && parseInt(response['statusCode']) !== 200)
                     console.log("ERROR: " + response['message'] + " with status code " + response['statusCode']);
-                else {
-                    console.log(response)
+                else 
                     this.setState({ caloriesStatus: response['data']['calories']['totalCalories']})
-                }
             })
             .catch(error => console.log(error))
     }
