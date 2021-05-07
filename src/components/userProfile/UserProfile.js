@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import './UserProfile.css';
-import DailyCaloriesCounter from './DailyCaloriesCounter';
+import DailyCounter from './DailyCounter';
 import NewUserData from './NewUserData';
 import SignedInNavigationBar from './SignedInNavigationBar';
 
@@ -10,7 +10,11 @@ class UserProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            caloriesStatus: ''
+            caloriesStatus: 0,
+            carbosStatus: 0,
+            fatsStatus: 0,
+            proteinsStatus: 0,
+            calculatorType: 'Calories Remaining'
         };
     }
 
@@ -23,16 +27,26 @@ class UserProfile extends Component {
             .then(response => {
                 if(response['statusCode'] && parseInt(response['statusCode']) !== 200)
                     console.log("ERROR: " + response['message'] + " with status code " + response['statusCode']);
-                else 
-                    this.setState({ caloriesStatus: response['data']['calories']['totalCalories']})
+                else {
+                    this.setState({ 
+                        caloriesStatus: response['data']['calories']['totalCalories'],
+                        carbosStatus: response['data']['carbohydrates']['totalCarbohydrates'],
+                        fatsStatus: response['data']['fats']['totalFats'],
+                        proteinsStatus: response['data']['proteins']['totalProteins']
+                    })
+                }
             })
             .catch(error => console.log(error))
     }
 
+
     render() {
 
         const {
-            caloriesStatus
+            caloriesStatus,
+            carbosStatus,
+            fatsStatus,
+            proteinsStatus
         } = this.state;
         
         return (       
@@ -41,7 +55,6 @@ class UserProfile extends Component {
                     <SignedInNavigationBar />
                 </Row>
                 <Row noGutters>
-                    
                     {
                         this.props.user.firstLogin === true
                         ?
@@ -54,13 +67,16 @@ class UserProfile extends Component {
                             <div></div>
                         )
                     }
-                    <DailyCaloriesCounter 
+                    <DailyCounter 
                         user={this.props.user}
                         userBMR={this.props.userBMR}
                         setUserBMR={this.props.setUserBMR} 
                         onRouteChange={() => this.props.history.push('/chooseFood')}
                         setMealType={this.props.setMealType}
                         caloriesStatus={caloriesStatus}
+                        carbosStatus={carbosStatus}
+                        fatsStatus={fatsStatus}
+                        proteinsStatus={proteinsStatus}
                      />
                 </Row>
             </Container>               
