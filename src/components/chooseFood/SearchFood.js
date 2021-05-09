@@ -464,6 +464,7 @@ class SearchFood extends Component {
                         hideServingModal={this.hideServingModal}
                         numberOfServings={numberOfServings}
                         servingModal={servingModal}
+                        buttonType={''}
                     /> :(
                         <FoodInfo 
                             showFoodInfoModal={showFoodInfoModal} 
@@ -482,6 +483,7 @@ class SearchFood extends Component {
                             hideServingModal={this.hideServingModal}
                             numberOfServings={numberOfServings}
                             servingModal={servingModal}
+                            buttonType={''}
                         />
                     )
                 }
