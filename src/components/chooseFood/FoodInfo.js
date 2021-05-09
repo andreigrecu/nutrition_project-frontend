@@ -107,7 +107,7 @@ class FoodInfo extends Component {
 
     render() {
 
-        const {
+        let {
             numberOfServings,
             servingModal
         } = this.props;
@@ -130,6 +130,8 @@ class FoodInfo extends Component {
             for(let i = 1; i < tokens.length; i++)
                 finalString += " " + tokens[i];
         }
+
+        numberOfServings = parseFloat(numberOfServings).toFixed(2);
 
         return(
             <div>
@@ -181,8 +183,8 @@ class FoodInfo extends Component {
                                                 <Button 
                                                     variant="secondary" 
                                                     className="mr-2" 
-                                                    onClick={this.props.showServingModal}>
-                                                {numberOfServings}
+                                                    onClick={this.props.showServingModal}>                                              
+                                                {numberOfServings}                                         
                                                 </Button>
                                                 <Button 
                                                     variant="secondary" 
@@ -210,7 +212,7 @@ class FoodInfo extends Component {
                                                 <div>{recalculatedServingSize * 100} % of one portion</div> :(
                                                 this.props.itemsDetails.serving_size ?
                                                     <div>{finalString}</div>
-                                                :(  this.props.itemsDetails && this.props.itemsDetails.nutrition.weightPerServing ?
+                                                :(  this.props.itemsDetails && this.props.itemsDetails.nutrition && this.props.itemsDetails.nutrition.weightPerServing ?
                                                         <div>
                                                             {this.props.itemsDetails.nutrition.weightPerServing['amount']} 
                                                             {this.props.itemsDetails.nutrition.weightPerServing['unit']} 
@@ -329,13 +331,26 @@ class FoodInfo extends Component {
                             <Row noGutters>
                                 <Col sm="8"></Col>
                                 <Col sm="4">
-                                    <Button 
-                                        variant="primary" 
-                                        onClick={() => {
-                                            this.addFoodToCart();
-                                        }}>
-                                            Add To Your Cart
-                                    </Button>
+                                    {
+                                        this.props.buttonType === 'delete' ?
+                                            <Button
+                                                variant="primary"
+                                                onClick={
+                                                    this.props.deleteFoodFromCart
+                                                }
+                                            >                                         
+                                                    Delete from cart
+                                            </Button>  :(
+                                                <Button 
+                                                    variant="primary" 
+                                                    onClick={() => {
+                                                        this.addFoodToCart();
+                                                    }}
+                                                >
+                                                        Add To Your Cart
+                                                </Button>
+                                            )                                                                    
+                                    }
                                 </Col>
                             </Row>
                         </Container>

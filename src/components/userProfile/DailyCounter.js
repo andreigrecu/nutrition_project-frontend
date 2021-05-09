@@ -98,20 +98,20 @@ class DailyCaloriesCounter extends Component {
 
         switch(calculatorType) {
             case('Calories Remaining'):
-                diffShow = diffCalories;
-                orangeDiffColor = ((30 * (this.props.userBMR.toFixed())) / 100).toFixed();
+                diffShow = diffCalories.toFixed();
+                orangeDiffColor = ((30 * (this.props.userBMR.toFixed())) / 100);
                 break;
             case('Carbohydrates Remaining'):
-                diffShow = diffCarbos;
-                orangeDiffColor = ((30 * carbosGramsGoal) / 100).toFixed();
+                diffShow = diffCarbos.toFixed();
+                orangeDiffColor = ((30 * carbosGramsGoal) / 100);
                 break;
             case('Fats Remaining'):
-                orangeDiffColor = ((30 * fatsGramsGoal) / 100).toFixed();
-                diffShow = diffFats;
+                diffShow = diffFats.toFixed();
+                orangeDiffColor = ((30 * fatsGramsGoal) / 100);
                 break;
             case('Proteins Remaining'):
-                orangeDiffColor = ((30 * proteinsGramsGoal) / 100).toFixed();
-                diffShow = diffProteins;
+                diffShow = diffProteins.toFixed();
+                orangeDiffColor = ((30 * proteinsGramsGoal) / 100);
                 break;
             default:
                 break;
@@ -121,7 +121,7 @@ class DailyCaloriesCounter extends Component {
             <Container fluid={true} className="p-0">
                 <hr style={{'margin': '0'}}></hr>
                 <Row noGutters>
-                    <Col sm="4" className="changeMeasureType">
+                    <Col sm="2" className="changeMeasureType">
                         <DropdownButton id="calculator-dropdown" title={calculatorType}>
                             <Dropdown.Item 
                                 onClick={() => this.onChangeCalculatorType('Calories')}
@@ -144,6 +144,10 @@ class DailyCaloriesCounter extends Component {
                                 Proteins
                             </Dropdown.Item>
                         </DropdownButton>
+                    </Col>
+                    <Col sm = "1"></Col>
+                    <Col sm="1">
+                        <Button onClick={this.popModalPosibilities} style={{'textAlign': 'center'}}>+</Button>
                     </Col>
                     <Col sm="8"></Col>
                 </Row>
@@ -172,13 +176,13 @@ class DailyCaloriesCounter extends Component {
                     <Col sm="2" className="align">
                         {
                             calculatorType === 'Calories Remaining' ?
-                                <div>{this.props.caloriesStatus}</div> :
+                                <div>{this.props.caloriesStatus.toFixed()}</div> :
                             calculatorType === 'Carbohydrates Remaining' ?
-                                <div>{this.props.carbosStatus}</div> :
+                                <div>{this.props.carbosStatus.toFixed()}</div> :
                             calculatorType === 'Fats Remaining' ?   
-                                <div>{this.props.fatsStatus}</div> :
+                                <div>{this.props.fatsStatus.toFixed()}</div> :
                             calculatorType === 'Proteins Remaining' &&
-                                <div>{this.props.proteinsStatus}</div> 
+                                <div>{this.props.proteinsStatus.toFixed()}</div> 
                         }
                         <div className="counterText">Food</div>
                     </Col>
@@ -193,26 +197,23 @@ class DailyCaloriesCounter extends Component {
                             this.props.user.firstLogin === true ?
                             <div>{0 - this.props.caloriesStatus}</div> : (
                                 this.props.userBMR ?
-                                    diffShow < 0 ?
-                                    <div style={{'color': 'red'}}>{diffShow}</div> :(
-                                        diffShow < orangeDiffColor ?
-                                        <div style={{'color': 'orange'}}>{diffShow}</div> :(
-                                            <div>{diffShow}</div>
-                                        )
-                                    )
+                                    diffShow < -1 ?
+                                    <div style={{'color': 'red'}}>{diffShow}</div> :
+                                        diffShow <= 0 && diffShow > -1 ?
+                                            <div style={{'color': 'red'}}>{0}</div> 
+                                                :(
+                                                    diffShow < orangeDiffColor ?
+                                                    <div style={{'color': 'orange'}}>{diffShow}</div> :(
+                                                        <div>{diffShow}</div>
+                                                    )
+                                                )
                                 :(<div>{0 - this.props.caloriesStatus}</div>)
                             )
                         }                     
                         <div className="counterText">Total</div>
                     </Col>
                 </Row>
-                <hr></hr>
-                <Row noGutters>
-                    <Col sm="10"></Col>
-                    <Col sm="2">
-                        <Button onClick={this.popModalPosibilities} style={{'textAlign': 'center'}}>+</Button>
-                    </Col>
-                </Row>
+                <hr style={{'marginBottom': '0%'}}></hr>
                 {   
                     showPosibilitiesModal === true ?
                     <PosibilitiesModal 
