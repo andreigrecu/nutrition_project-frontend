@@ -57,7 +57,8 @@ class App extends Component {
 
     ls.set('state', state);
     this.setState({user: state.user});
-  }
+  } 
+  
 
   render() {
 
