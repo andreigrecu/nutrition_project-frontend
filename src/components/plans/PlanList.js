@@ -28,13 +28,17 @@ class PlanList extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:4400/programs', {
-                method: 'get'
-            })
-            .then(response => response.json())
-            .then(response => {
-                this.setState({ planList: response }); 
-            });
+        if(!this.props.user.id)
+            this.props.history.push('/signin');
+        else {
+            fetch('http://localhost:4400/programs', {
+                    method: 'get'
+                })
+                .then(response => response.json())
+                .then(response => {
+                    this.setState({ planList: response }); 
+                });
+        }
     }
 
     handleHide = () => {

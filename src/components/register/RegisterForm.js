@@ -20,7 +20,7 @@ class RegisterForm extends Component {
             emailAlreadyExists: false
         }
     }
-
+    
     onEmailChange = (event) => {
         this.setState({email: event.target.value})
     }

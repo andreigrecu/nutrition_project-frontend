@@ -342,22 +342,26 @@ class SearchFood extends Component {
 
     componentDidMount = () => {
         
-        fetch(`http://localhost:4400/users/${this.props.user.id}/lastWeekMeals`, {
-            method: 'put',
-            headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({
-                mealType: this.props.mealType
+        if(!this.props.user.id) 
+            this.props.history.push('/signin');
+        else {
+            fetch(`http://localhost:4400/users/${this.props.user.id}/lastWeekMeals`, {
+                method: 'put',
+                headers: {'Content-type': 'application/json'},
+                body: JSON.stringify({
+                    mealType: this.props.mealType
+                })
             })
-        })
-            .then(response => response.json())
-            .then(response => {
-                if(parseInt(response['meta']['statusCode']) !== 200)
-                    console.log("ERROR: " + response['meta']['message'] + " of status code " + response['meta']['statusCode']);
-                else {
-                    this.setState({ history: response['data'] });
-                }
-            })
-            .catch(error => console.log(error))
+                .then(response => response.json())
+                .then(response => {
+                    if(parseInt(response['meta']['statusCode']) !== 200)
+                        console.log("ERROR: " + response['meta']['message'] + " of status code " + response['meta']['statusCode']);
+                    else {
+                        this.setState({ history: response['data'] });
+                    }
+                })
+                .catch(error => console.log(error))
+        }
     }
 
     onHistoryItemClick = (item) => {

@@ -20,24 +20,28 @@ class UserProfile extends Component {
     }
 
     componentDidMount = () => {
-        
-        fetch(`http://localhost:4400/users/${this.props.user.id}/todayNutrients`, {
-            method: 'get'
-        })
-            .then(response => response.json())
-            .then(response => {
-                if(response['statusCode'] && parseInt(response['statusCode']) !== 200)
-                    console.log("ERROR: " + response['message'] + " with status code " + response['statusCode']);
-                else {
-                    this.setState({ 
-                        caloriesStatus: response['data']['calories']['totalCalories'],
-                        carbosStatus: response['data']['carbohydrates']['totalCarbohydrates'],
-                        fatsStatus: response['data']['fats']['totalFats'],
-                        proteinsStatus: response['data']['proteins']['totalProteins']
-                    })
-                }
+
+        if(!this.props.user.id)
+            this.props.history.push('/signin');
+        else {
+            fetch(`http://localhost:4400/users/${this.props.user.id}/todayNutrients`, {
+                method: 'get'
             })
-            .catch(error => console.log(error))
+                .then(response => response.json())
+                .then(response => {
+                    if(response['statusCode'] && parseInt(response['statusCode']) !== 200)
+                        console.log("ERROR: " + response['message'] + " with status code " + response['statusCode']);
+                    else {
+                        this.setState({ 
+                            caloriesStatus: response['data']['calories']['totalCalories'],
+                            carbosStatus: response['data']['carbohydrates']['totalCarbohydrates'],
+                            fatsStatus: response['data']['fats']['totalFats'],
+                            proteinsStatus: response['data']['proteins']['totalProteins']
+                        })
+                    }
+                })
+                .catch(error => console.log(error))
+        }
     }
 
     getTodayNutrients = () => {

@@ -33,6 +33,18 @@ class App extends Component {
     this.state = initialState;
   }
 
+  componentDidMount = () => {
+    ls.set('state', {
+      user: {}
+    })
+  }
+
+  clearUserState = () => {
+    ls.set('state', {
+      user: {}
+    })
+  }
+
   setMealType = (meal) => {
     this.setState({ mealType: meal });
     ls.set('mealType', meal);
@@ -65,18 +77,26 @@ class App extends Component {
     let state = ls.get('state');
     const mealType = ls.get('mealType');
     const userBMR = ls.get('userBMR');
-    
+
     return (
 
       <BrowserRouter>
         <Switch>
           <Route path="/" exact render={(props) => (
-            <WelcomePage {... props} loadUser={this.loadUser} />
+            <WelcomePage {... props} 
+              loadUser={this.loadUser} 
+              user={state.user}
+              clearUserState={this.clearUserState}
+            />
           )} />
           <Route path="/termsAndConditions" exact component={ TermsAndConditions } />
           <Route path="/about" exact component={ About } />
           <Route path="/signin" exact render={(props) => (
-            <SignInPage {... props} loadUser={this.loadUser} />
+            <SignInPage {... props} 
+              loadUser={this.loadUser} 
+              clearUserState={this.clearUserState}
+              user={state.use}
+            />
           )} /> 
           <Route path="/users" exact render={(props) => (
             <UserProfile {... props}
@@ -95,7 +115,7 @@ class App extends Component {
               mealType={mealType}
               user={state.user} 
             />
-          )} />
+          )} />         
           <Route path="/" render={() => <div>404</div>} />
         </Switch>
       </BrowserRouter>
