@@ -18,6 +18,10 @@ class SignInPage extends Component {
         this.props.history.push('/about');
     }
 
+    componentDidMount = () => {
+        this.props.clearUserState();
+    }
+
     render() {
 
         return(

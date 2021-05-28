@@ -9,6 +9,10 @@ class WelcomePage extends Component {
         this.state={};
     }
 
+    componentDidMount = () => {
+        this.props.clearUserState();
+    }
+
     render() {
         return(
             <div>

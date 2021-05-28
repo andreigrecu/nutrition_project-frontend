@@ -13,6 +13,8 @@ import TermsAndConditions from '../components/terms/TermsAndConditions';
 import ChooseFood from '../components/chooseFood/SearchFood';
 import PlanList from '../components/plans/PlanList';
 import ls from 'local-storage';
+import ChangePassword from '../components/changePassword/ChangePassword';
+import UserInfo from '../components/userInfo/UserInfo';
 
 const initialState = {
   user: {
@@ -31,12 +33,6 @@ class App extends Component {
   constructor() {
     super();
     this.state = initialState;
-  }
-
-  componentDidMount = () => {
-    ls.set('state', {
-      user: {}
-    })
   }
 
   clearUserState = () => {
@@ -70,16 +66,15 @@ class App extends Component {
     ls.set('state', state);
     this.setState({user: state.user});
   } 
-  
 
   render() {
 
     let state = ls.get('state');
     const mealType = ls.get('mealType');
-    const userBMR = ls.get('userBMR');
+    const userBMR = ls.get('userBMR') || 0;
 
+    console.log(state)
     return (
-
       <BrowserRouter>
         <Switch>
           <Route path="/" exact render={(props) => (
@@ -90,12 +85,22 @@ class App extends Component {
             />
           )} />
           <Route path="/termsAndConditions" exact component={ TermsAndConditions } />
+          <Route path="/users/changePassword" exact render={(props) => (
+            <ChangePassword {... props}
+              user={state.user}
+            />
+          )} />
+          <Route path="/users/informations" exact render={(props) => (
+            <UserInfo {... props}
+              user={state.user}
+            />
+          )} />
           <Route path="/about" exact component={ About } />
           <Route path="/signin" exact render={(props) => (
             <SignInPage {... props} 
               loadUser={this.loadUser} 
               clearUserState={this.clearUserState}
-              user={state.use}
+              user={state.user}
             />
           )} /> 
           <Route path="/users" exact render={(props) => (
