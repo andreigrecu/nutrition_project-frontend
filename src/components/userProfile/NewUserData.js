@@ -410,10 +410,10 @@ class NewUserData extends Component {
                                     Please choose your height!</h6>
                                 : (<div></div>)    
                             }
-                            <Form.Group controlId="formTime">
+                            {/* <Form.Group controlId="formTime">
                                 <Form.Label>How fast do you wish you wish to achieve your goal? [days]</Form.Label>
                                 <Form.Control size="sm" onChange={this.onNumDaysGoal} />
-                            </Form.Group>
+                            </Form.Group> */}
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>

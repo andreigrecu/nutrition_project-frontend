@@ -29,9 +29,16 @@ class DailyCaloriesCounter extends Component {
 
     setNutrientsPercentage = (carbosPercentage, fatsPercentage, proteinsPercentage) => {
         this.setState({ carbosPercentage, fatsPercentage, proteinsPercentage });
-        const carbosGramsGoal = parseInt(((carbosPercentage * this.state.userBMR) / 400).toFixed());
-        const fatsGramsGoal = parseInt(((fatsPercentage * this.state.userBMR) / 900).toFixed());
-        const proteinsGramsGoal = parseInt(((proteinsPercentage * this.state.userBMR) / 400).toFixed());
+
+        let carbosGramsGoal = 0;
+        let fatsGramsGoal = 0;
+        let proteinsGramsGoal = 0;
+        if(carbosPercentage >= 0)
+            carbosGramsGoal = parseInt(((carbosPercentage * this.state.userBMR) / 400).toFixed());
+        if(fatsPercentage >= 0)
+            fatsGramsGoal = parseInt(((fatsPercentage * this.state.userBMR) / 900).toFixed());
+        if(proteinsPercentage >= 0)
+            proteinsGramsGoal = parseInt(((proteinsPercentage * this.state.userBMR) / 400).toFixed());
         this.setState({ carbosGramsGoal, fatsGramsGoal, proteinsGramsGoal });
     }
 
@@ -89,6 +96,7 @@ class DailyCaloriesCounter extends Component {
             proteinsGramsGoal
         } = this.state;
 
+        console.log("aici", this.props)
         const diffCalories = this.props.userBMR.toFixed() - this.props.caloriesStatus;
         const diffCarbos = carbosGramsGoal - this.props.carbosStatus;
         const diffFats = fatsGramsGoal - this.props.fatsStatus;

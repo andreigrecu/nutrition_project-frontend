@@ -99,7 +99,7 @@ class SignInForm extends Component {
                 
                 <Modal show={wrongCredentials} onHide={this.handleClose} centered keyboard={true}> 
                     <Modal.Header closeButton>
-                        <Modal.Title style={{'color': 'red'}}>Wrong username or password!</Modal.Title>
+                        <h3 style={{'color': 'red'}}>Wrong username or password!</h3>
                     </Modal.Header>
                     <Modal.Body>
                         <p>Please try again!</p>

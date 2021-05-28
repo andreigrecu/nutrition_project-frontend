@@ -19,6 +19,18 @@ class SignedInNavigationBar extends Component {
         this.props.history.push('/users');
     }
 
+    onDisconnetClick = () => {
+        this.props.history.push('/');
+    }
+
+    onChangePasswordClick = () => {
+        this.props.history.push('/users/changePassword');
+    }
+
+    userInformations = () => {
+        this.props.history.push('/users/informations');
+    }
+
     profileDropdown = 
         <Dropdown>
             <Dropdown.Toggle variant="light" id="profileDropdown">
@@ -32,13 +44,13 @@ class SignedInNavigationBar extends Component {
             </Dropdown.Toggle>
             <Dropdown.Menu>
                 <Dropdown.Item>
-                    <h6>User Informations</h6>
+                    <h6 onClick={this.userInformations}>User Informations</h6>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                    <h6>Change password</h6>
+                    <h6 onClick={this.onChangePasswordClick}>Change password</h6>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                    <h6>Disconnect</h6>
+                    <h6 onClick={this.onDisconnetClick}>Disconnect</h6>
                 </Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>
