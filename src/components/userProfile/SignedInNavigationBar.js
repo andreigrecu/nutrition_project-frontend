@@ -67,14 +67,12 @@ class SignedInNavigationBar extends Component {
                                     <Nav.Link onClick={this.changeRouteToUserProfile}>Profile</Nav.Link>
                                 </Nav>     
                             </Col>      
-                            <Col sm="3">                   
+                            <Col sm="2">                   
                                 <Nav className="justify-content-end">
                                     {this.profileDropdown}
-                                    <Nav.Link style={{'marginLeft': '10%'}}>
-                                        <div>Logo</div>
-                                    </Nav.Link>
                                 </Nav>
                             </Col>
+                            <Col sm="1"></Col>
                         </Navbar>
                     </Col>
                 </Row>

@@ -8,7 +8,6 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import About from '../components/about/About';
 import TermsAndConditions from '../components/terms/TermsAndConditions';
 import ChooseFood from '../components/chooseFood/SearchFood';
 import PlanList from '../components/plans/PlanList';
@@ -73,7 +72,6 @@ class App extends Component {
     const mealType = ls.get('mealType');
     const userBMR = ls.get('userBMR') || 0;
 
-    console.log(state)
     return (
       <BrowserRouter>
         <Switch>
@@ -95,7 +93,6 @@ class App extends Component {
               user={state.user}
             />
           )} />
-          <Route path="/about" exact component={ About } />
           <Route path="/signin" exact render={(props) => (
             <SignInPage {... props} 
               loadUser={this.loadUser} 

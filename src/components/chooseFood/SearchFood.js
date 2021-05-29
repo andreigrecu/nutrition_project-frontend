@@ -13,6 +13,7 @@ import spoonacularQueries from '../../common/spoonacularQueries';
 import SearchFoodPagination from './SearchFoodPagination';
 import ls from 'local-storage';
 import FoodInfo from './FoodInfo';
+import Footer from '../footer/Footer';
 
 class SearchFood extends Component {
 
@@ -640,6 +641,9 @@ class SearchFood extends Component {
                         (!(autocompletedItems && autocompletedItems.length !== 0) || itemClicked === true) &&
                         <Row style={{'paddingTop': '30%'}}></Row>
                     }
+                <Row noGutters>
+                    <Footer />
+                </Row>
             </Container>
         )
     }

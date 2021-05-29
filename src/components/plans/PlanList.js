@@ -9,6 +9,7 @@ import './PlanList.css';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import nutritionalValue from '../../common/nutritionConstants';
+import Footer from '../footer/Footer';
 
 class PlanList extends Component {
 
@@ -51,20 +52,22 @@ class PlanList extends Component {
         fetch(`http://localhost:4400/users/${this.props.user.id}/userInfo`, {
             method: 'get'
         })
-        .then(response => response.json())
-        .then(response => {
-            if(response['data'] && (response['data']['programId'] === userProgramId)) {
-                this.setState({ activeProgram: true });
-                this.setState({ proteinPercent: response['data']['proteinsPercent'] });
-                this.setState({ fatsPercent: response['data']['fatsPercent'] });
-                this.setState({ carbosPercent: response['data']['carbohydratesPercent'] });
-            } else {
-                this.setState({ activeProgram: false });
-                this.setState({ proteinPercent: nutritionalValue.PROTEINS });
-                this.setState({ fatsPercent: nutritionalValue.FATS });
-                this.setState({ carbosPercent: nutritionalValue.CARBOHYDRATES });
-            }
-        })
+            .then(response => response.json())
+            .then(response => {
+                if(response['data'] && (response['data']['programId'] === userProgramId)) {
+                    this.setState({ activeProgram: true });
+                    this.setState({ proteinPercent: response['data']['proteinsPercent'] });
+                    this.setState({ fatsPercent: response['data']['fatsPercent'] });
+                    this.setState({ carbosPercent: response['data']['carbohydratesPercent'] });
+                } else {
+                    this.setState({ activeProgram: false });
+                    this.setState({ proteinPercent: nutritionalValue.PROTEINS });
+                    this.setState({ fatsPercent: nutritionalValue.FATS });
+                    this.setState({ carbosPercent: nutritionalValue.CARBOHYDRATES });
+                }
+            })
+            .catch(error => console.log(error))
+
     }
 
     setStateProgramChosen = (id) => {
@@ -355,6 +358,9 @@ class PlanList extends Component {
                         </div>
                     )
                 }
+                <div style={{'paddingTop': '5%'}}>
+                    <Footer />
+                </div>
             </div>
         )
     }

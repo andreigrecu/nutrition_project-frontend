@@ -55,13 +55,22 @@ class DailyCaloriesCounter extends Component {
     }
 
     calculateBMR = (userInfo) => {
-        const sameBMR =  10 * userInfo['data']['weight'] + 
+
+        let percentage = 0;
+        if(userInfo['data'] && userInfo['data']['program']['percentageType'])
+            percentage = userInfo['data']['program']['percentageType'] - 100;
+
+        let sameBMR =  10 * userInfo['data']['weight'] + 
             6.25 * userInfo['data']['height'] - 5 * userInfo['data']['age'];
 
         if(userInfo['data']['gender'] === 'male') {
-            this.setState({ userBMR: sameBMR + 5 });
+            sameBMR = sameBMR + 5;
+            sameBMR = (sameBMR + ((percentage * sameBMR) / 100));
+            this.setState({ userBMR: sameBMR });
         } else if(userInfo['data']['gender'] === 'female') {
-            this.setState({ userBMR: sameBMR - 161 });
+            sameBMR = sameBMR - 161;
+            sameBMR = (sameBMR + ((percentage * sameBMR) / 100));
+            this.setState({ userBMR: sameBMR });
         }
     }
 
@@ -96,8 +105,8 @@ class DailyCaloriesCounter extends Component {
             proteinsGramsGoal
         } = this.state;
 
-        console.log("aici", this.props)
-        const diffCalories = this.props.userBMR.toFixed() - this.props.caloriesStatus;
+        let showUserBMR = parseFloat(this.props.userBMR);
+        const diffCalories = showUserBMR.toFixed() - this.props.caloriesStatus;
         const diffCarbos = carbosGramsGoal - this.props.carbosStatus;
         const diffFats = fatsGramsGoal - this.props.fatsStatus;
         const diffProteins = proteinsGramsGoal - this.props.proteinsStatus;
@@ -107,7 +116,7 @@ class DailyCaloriesCounter extends Component {
         switch(calculatorType) {
             case('Calories Remaining'):
                 diffShow = diffCalories.toFixed();
-                orangeDiffColor = ((30 * (this.props.userBMR.toFixed())) / 100);
+                orangeDiffColor = ((30 * (showUserBMR.toFixed())) / 100);
                 break;
             case('Carbohydrates Remaining'):
                 diffShow = diffCarbos.toFixed();
@@ -166,7 +175,7 @@ class DailyCaloriesCounter extends Component {
                             <div>0</div> : (
                                 this.props.userBMR ? 
                                     calculatorType === 'Calories Remaining' ?
-                                        <div>{this.props.userBMR.toFixed()}</div> :
+                                        <div>{showUserBMR.toFixed()}</div> :
                                     calculatorType === 'Carbohydrates Remaining' ?
                                         <div>{carbosGramsGoal}</div> :
                                     calculatorType === 'Fats Remaining' ?

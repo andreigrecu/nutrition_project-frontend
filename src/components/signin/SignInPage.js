@@ -6,16 +6,14 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
+import LOGO from './LOGO.png';
+import Footer from '../footer/Footer';
 
 class SignInPage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {};
-    }
-
-    changeRouteToAboutUs = () => {
-        this.props.history.push('/about');
     }
 
     componentDidMount = () => {
@@ -31,10 +29,10 @@ class SignInPage extends Component {
                     <Row noGutters>
                         <Col sm="3"></Col>
                         <Col sm="1">
-                            <h2 className="logo">LOGO</h2>
+                            <img src={LOGO} alt="logo" />
                         </Col>
                         <Col sm="4">
-                            <h2 className="title">FITNESS APP</h2>
+                            <h2 className="logo">FITNESS APP</h2>
                         </Col>
                         <Col sm="4"></Col>
                     </Row>
@@ -57,10 +55,14 @@ class SignInPage extends Component {
                     <Row>
                         <Col sm="5" style={{'paddingBottom': '5%'}}></Col>
                         <Col sm="2" style={{'textAlign': 'center', 'paddingBottom': '5%'}}>
-                            <Button variant="link" className="btn-footer" onClick={this.changeRouteToAboutUs}>About</Button>
-                            <Button variant="link" className="btn-footer">Help</Button>
+                            <Button variant="link" className="btn-footer">
+                                <a style={{'color': 'white'}} href = "mailto: proiectlicenta2021@gmail.com">Help</a>
+                            </Button>
                         </Col>
                         <Col sm="5" style={{'paddingBottom': '5%'}}></Col>
+                    </Row>
+                    <Row noGutters>
+                        <Footer />
                     </Row>
                 </Container>
             </div>

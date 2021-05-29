@@ -6,6 +6,7 @@ import DailyCounter from './DailyCounter';
 import NewUserData from './NewUserData';
 import SignedInNavigationBar from './SignedInNavigationBar';
 import UserDailyCart from './UserDailyCart';
+import Footer from '../footer/Footer';
 
 class UserProfile extends Component {
     constructor(props) {
@@ -15,7 +16,7 @@ class UserProfile extends Component {
             carbosStatus: 0,
             fatsStatus: 0,
             proteinsStatus: 0,
-            calculatorType: 'Calories Remaining',
+            calculatorType: 'Calories Remaining'
         };
     }
 
@@ -70,7 +71,8 @@ class UserProfile extends Component {
             caloriesStatus,
             carbosStatus,
             fatsStatus,
-            proteinsStatus
+            proteinsStatus,
+
         } = this.state;
         
         return (       
@@ -109,6 +111,9 @@ class UserProfile extends Component {
                         forceUpdate={this.forceUpdate}
                         getTodayNutrients={this.getTodayNutrients}
                     />
+                </Row>
+                <Row style={{'paddingTop': '15%'}} noGutters>
+                    <Footer />
                 </Row>
             </Container>               
         );
