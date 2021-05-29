@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import NavigationBar from './NavigationBar';
 import MiddleComponent from './MiddleComponent';
+import Footer from '../footer/Footer';
 
 class WelcomePage extends Component {
 
@@ -19,6 +20,7 @@ class WelcomePage extends Component {
                 <div style={{'backgroundColor': 'rgba(0, 34, 84, 0.1)'}}>
                     <NavigationBar></NavigationBar>
                     <MiddleComponent loadUser={this.props.loadUser} ></MiddleComponent>
+                    <Footer></Footer>
                 </div>
             </div>
         );

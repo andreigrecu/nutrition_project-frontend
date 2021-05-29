@@ -5,15 +5,12 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import { withRouter } from 'react-router-dom';
+import LOGO from './LOGO.png';
 
 class NavigationBar extends Component {
 
     changeRouteToSignIn = () => {
         this.props.history.push('/signin');
-    }
-
-    changeRouteToAboutUs = () => {
-        this.props.history.push('/about');
     }
 
     changeRouteToHome = () => {
@@ -29,10 +26,11 @@ class NavigationBar extends Component {
                             <Nav className="mr-auto">
                                 <Nav.Link onClick={this.changeRouteToHome}>Home</Nav.Link>
                                 <Nav.Link onClick={this.changeRouteToSignIn}>Sign In</Nav.Link>
-                                <Nav.Link onClick={this.changeRouteToAboutUs}>About Us</Nav.Link>
                             </Nav>
                             <Nav className="ml-auto">
-                                <Nav.Link>Logo</Nav.Link>
+                                <Nav.Link>
+                                    <img src={LOGO} alt='logo' height="45" width="45"/>
+                                </Nav.Link>
                             </Nav>
                         </Navbar>
                     </Col>
