@@ -1,0 +1,14 @@
+.details {
+    padding-top: 15%;
+    padding-bottom: 5%;
+    text-align: center;
+}
+
+.noPad {
+    padding: 0 !important;
+}
+
+.saveBtn {
+    padding-left: 30% !important;
+    padding-right: 30% !important;
+}
