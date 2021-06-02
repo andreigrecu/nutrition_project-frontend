@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import './UserProfile.css';
 import DailyCounter from './DailyCounter';
 import NewUserData from './NewUserData';
 import SignedInNavigationBar from './SignedInNavigationBar';
 import UserDailyCart from './UserDailyCart';
 import Footer from '../footer/Footer';
+import GoalGraphic from './GoalGraphic';
 
 class UserProfile extends Component {
     constructor(props) {
@@ -112,7 +114,39 @@ class UserProfile extends Component {
                         getTodayNutrients={this.getTodayNutrients}
                     />
                 </Row>
-                <Row style={{'paddingTop': '15%'}} noGutters>
+                <Row noGutters style={{'paddingTop': '3%', 'paddingBottom': '2%'}}>
+                    <Col sm="6">
+                        <h3>Last week calories tracker</h3>
+                        <GoalGraphic 
+                            user={this.props.user}
+                            type={"CaloriesGraphic"}
+                        />
+                    </Col>
+                    <Col sm="6">
+                        <h3>Last week carbos tracker</h3>
+                        <GoalGraphic 
+                            user={this.props.user}
+                            type={"CarbosGraphic"}
+                        />
+                    </Col>
+                </Row>
+                <Row noGutters style={{'paddingTop': '3%', 'paddingBottom': '2%'}}>
+                    <Col sm="6">
+                        <h3>Last week fats tracker</h3>
+                        <GoalGraphic 
+                            user={this.props.user}
+                            type={"FatsGraphic"}
+                        />
+                    </Col>
+                    <Col sm="6">
+                        <h3>Last week proteins tracker</h3>
+                        <GoalGraphic 
+                            user={this.props.user}
+                            type={"ProteinsGraphic"}
+                        />
+                    </Col>
+                </Row>
+                <Row noGutters>
                     <Footer />
                 </Row>
             </Container>               

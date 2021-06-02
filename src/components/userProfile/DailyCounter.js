@@ -19,7 +19,9 @@ class DailyCaloriesCounter extends Component {
 
             carbosGramsGoal: 0,
             fatsGramsGoal: 0,
-            proteinsGramsGoal: 0 
+            proteinsGramsGoal: 0,
+
+            hasProgram: false
         };
     }
 
@@ -66,11 +68,14 @@ class DailyCaloriesCounter extends Component {
         if(userInfo['data']['gender'] === 'male') {
             sameBMR = sameBMR + 5;
             sameBMR = (sameBMR + ((percentage * sameBMR) / 100));
-            this.setState({ userBMR: sameBMR });
+
+            if(userInfo['data'] && userInfo['data']['programId'] && userInfo['data']['programId'] !== null && userInfo['data']['programId'] !== " ")
+                this.setState({ userBMR: sameBMR });
         } else if(userInfo['data']['gender'] === 'female') {
             sameBMR = sameBMR - 161;
             sameBMR = (sameBMR + ((percentage * sameBMR) / 100));
-            this.setState({ userBMR: sameBMR });
+            if(userInfo['data'] && userInfo['data']['programId'] && userInfo['data']['programId'] !== null && userInfo['data']['programId'] !== " ")
+                this.setState({ userBMR: sameBMR });
         }
     }
 
@@ -133,6 +138,7 @@ class DailyCaloriesCounter extends Component {
             default:
                 break;
         }
+
 
         return(
             <Container fluid={true} className="p-0">
@@ -213,18 +219,16 @@ class DailyCaloriesCounter extends Component {
                         {
                             this.props.user.firstLogin === true ?
                             <div>{0 - this.props.caloriesStatus}</div> : (
-                                this.props.userBMR ?
-                                    diffShow < -1 ?
-                                    <div style={{'color': 'red'}}>{diffShow}</div> :
-                                        diffShow <= 0 && diffShow > -1 ?
-                                            <div style={{'color': 'red'}}>{0}</div> 
-                                                :(
-                                                    diffShow < orangeDiffColor ?
-                                                    <div style={{'color': 'orange'}}>{diffShow}</div> :(
-                                                        <div>{diffShow}</div>
-                                                    )
+                                diffShow < -1 ?
+                                <div style={{'color': 'red'}}>{diffShow}</div> :
+                                    diffShow <= 0 && diffShow > -1 ?
+                                        <div style={{'color': 'red'}}>{0}</div> 
+                                            :(
+                                                diffShow < orangeDiffColor ?
+                                                <div style={{'color': 'orange'}}>{diffShow}</div> :(
+                                                    <div>{diffShow}</div>
                                                 )
-                                :(<div>{0 - this.props.caloriesStatus}</div>)
+                                            )
                             )
                         }                     
                         <div className="counterText">Total</div>
