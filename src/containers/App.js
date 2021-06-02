@@ -118,7 +118,7 @@ class App extends Component {
               user={state.user} 
             />
           )} />         
-          <Route path="/" render={() => <div>404</div>} />
+          <Route path="/" render={() => <h1>404 Page not found</h1>} />
         </Switch>
       </BrowserRouter>
   );

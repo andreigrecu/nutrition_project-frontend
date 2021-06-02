@@ -60,6 +60,8 @@ class PlanList extends Component {
                     this.setState({ fatsPercent: response['data']['fatsPercent'] });
                     this.setState({ carbosPercent: response['data']['carbohydratesPercent'] });
                 } else {
+                    //aici ar trb sa iau de la fiecare program in parte numarul de nutrienti
+                    //pentru ca nu toate programele o sa aibe 50,20,30
                     this.setState({ activeProgram: false });
                     this.setState({ proteinPercent: nutritionalValue.PROTEINS });
                     this.setState({ fatsPercent: nutritionalValue.FATS });
@@ -160,7 +162,7 @@ class PlanList extends Component {
     }
 
     onAddProteins = () => {
-        if(this.state.proteinsPercent < 35)
+        if(this.state.proteinPercent < 35)
             this.setState({ proteinPercent: this.state.proteinPercent + 1});
     }
 
@@ -175,14 +177,17 @@ class PlanList extends Component {
             headers: {'Content-type': 'application/json'},
             body: JSON.stringify({
                 userId: this.props.user.id,
-                programId: " "
+                programId: " ",
+                carbohydratesPercent: -1,
+                fatsPercent: -1,
+                proteinsPercent: -1
             })
         })
-        .then(response => response.json())
-        .then(response => {
-            if(response && response['statusCode'] && parseInt(response['statusCode']) !== 200) 
-                console.log("ERROR statusCode " + response['statusCode'] + "; errorMessage: " + response['message']); 
-        })
+            .then(response => response.json())
+            .then(response => {
+                if(response && response['statusCode'] && parseInt(response['statusCode']) !== 200) 
+                    console.log("ERROR statusCode " + response['statusCode'] + "; errorMessage: " + response['message']); 
+            })
         .catch(error => console.log(error))
         this.handleHide();
         this.setState({ activeProgram: false });
@@ -358,7 +363,7 @@ class PlanList extends Component {
                         </div>
                     )
                 }
-                <div style={{'paddingTop': '5%'}}>
+                <div style={{'paddingTop': '18%'}}>
                     <Footer />
                 </div>
             </div>
