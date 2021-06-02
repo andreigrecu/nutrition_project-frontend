@@ -24,21 +24,40 @@ class PlanList extends Component {
             carbosPercent: '',
             wrongPercents: false,
             activeProgram: false,
-            modifiedNutrients: false
+            modifiedNutrients: false,
+            programName: ''
         };
+    }
+
+    getUsedProgramName = () => {
+        fetch(`http://localhost:4400/users/${this.props.user.id}/userInfo`, {
+            method: 'get'
+        })
+            .then(response => response.json())
+            .then(response => {
+                if(response['statusCode'] && parseInt(response['statusCode']) !== 200)
+                    console.log("ERROR: " + response['message'] + "of status code " + response['statusCode']);
+                else if(response['data']['programId'])
+                    this.setState({ programName: response['data']['program']['name'] });
+            })
+            .catch(error => console.log(error))
     }
 
     componentDidMount() {
         if(!this.props.user.id)
             this.props.history.push('/signin');
         else {
+
+           this.getUsedProgramName();
+
             fetch('http://localhost:4400/programs', {
                     method: 'get'
-                })
+            })
                 .then(response => response.json())
                 .then(response => {
                     this.setState({ planList: response }); 
-                });
+                })
+                .catch(error => console.log(error));
         }
     }
 
@@ -107,6 +126,9 @@ class PlanList extends Component {
                 .then(response => {
                     if(response && response['statusCode'] && parseInt(response['statusCode']) !== 200)
                         console.log("ERROR statusCode " + response['statusCode'] + "; errorMessage: " + response['message']);
+                    else {
+                        this.getUsedProgramName();
+                    }
                 })
                 .catch(error => console.log(error))
             this.handleHide();
@@ -187,6 +209,8 @@ class PlanList extends Component {
             .then(response => {
                 if(response && response['statusCode'] && parseInt(response['statusCode']) !== 200) 
                     console.log("ERROR statusCode " + response['statusCode'] + "; errorMessage: " + response['message']); 
+                else 
+                    this.setState({ programName: ' ' });
             })
         .catch(error => console.log(error))
         this.handleHide();
@@ -203,7 +227,8 @@ class PlanList extends Component {
             carbosPercent,
             wrongPercents,
             activeProgram,
-            modifiedNutrients
+            modifiedNutrients,
+            programName
         } = this.state;
 
         return (
@@ -348,15 +373,29 @@ class PlanList extends Component {
                             {    
                                 planList.map((value, i) => {
                                     return(
-                                        <Plan 
-                                            key={i}
-                                            id={planList[i]._id}
-                                            name={planList[i].name}
-                                            description={planList[i].description}
-                                            imageName={planList[i].imageName}
-                                            handleShow={this.handleShow}     
-                                            setStateProgramChosen={this.setStateProgramChosen}                                              
-                                        />
+                                        planList[i].name === programName ?
+                                            <Plan 
+                                                key={i}
+                                                id={planList[i]._id}
+                                                name={planList[i].name}
+                                                description={planList[i].description}
+                                                imageName={planList[i].imageName}
+                                                handleShow={this.handleShow}     
+                                                setStateProgramChosen={this.setStateProgramChosen}  
+                                                active={true}                                          
+                                            /> 
+                                            : (
+                                                <Plan 
+                                                    key={i}
+                                                    id={planList[i]._id}
+                                                    name={planList[i].name}
+                                                    description={planList[i].description}
+                                                    imageName={planList[i].imageName}
+                                                    handleShow={this.handleShow}     
+                                                    setStateProgramChosen={this.setStateProgramChosen}  
+                                                    active={false}                                          
+                                                /> 
+                                            )
                                     )
                                 })
                             } 

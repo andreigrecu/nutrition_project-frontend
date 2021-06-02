@@ -32,19 +32,28 @@ class Plan extends Component {
     this.props.handleShow(this.props.id)
   }
 
-
   renderSwitch = new RenderSwitch();
 
   render() {
 
     return(
-        <div className='tc grow bg-light-green br3 pa3 ma2 dib bw2 shadow-5' onClick={this.handleClick} >
-          <img alt='robots' height="200" width="200" src={this.renderSwitch.renderSwitch(this.props.imageName)} />
-          <div>
-            <h2>{this.props.name}</h2>
-            <p>{this.props.description}</p>
-          </div>
-        </div>
+
+        this.props.active === false ?
+          <div className='tc grow bg-light-green br3 pa3 ma2 dib bw2 shadow-5' onClick={this.handleClick} >
+            <img alt='robots' height="200" width="200" src={this.renderSwitch.renderSwitch(this.props.imageName)} />
+            <div>
+              <h2>{this.props.name}</h2>
+              <p>{this.props.description}</p>
+            </div>
+          </div> : (
+             <div className='tc grow bg-light-red br3 pa3 ma2 dib bw2 shadow-5' onClick={this.handleClick} >
+                <img alt='robots' height="200" width="200" src={this.renderSwitch.renderSwitch(this.props.imageName)} />
+                <div>
+                  <h2>{this.props.name}</h2>
+                  <p>{this.props.description}</p>
+                </div>
+              </div>
+          )
       )
   }
 }

@@ -58,7 +58,8 @@ class TermsAndConditions extends Component {
                         <p>
                             Our programs are designed from easy to hard and are based on our experience. Some of them might be really hard to use by some of our users. 
                             If you know you have health problems better get in touch with a doctor before starting our programs. If you feel bad after you used one of 
-                            our programs, stop using it and contact a doctor. We are not responsible for problems arising from improper use of the application.
+                            our programs, stop using it and contact a doctor. We are not responsible for problems arising from improper use of the application. Also,
+                            the programs are based on your weight, height and age input, so if you sent them wrong, please change them in the user informations page.
                         </p>
                         <h5>6. Foods</h5>
                         <p>
