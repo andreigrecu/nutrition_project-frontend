@@ -141,6 +141,7 @@ class UserDailyCart extends Component {
             else {
                 this.openTodayMealsModal();
                 this.props.getTodayNutrients();
+                this.props.recalculateGraphics();
             }
         })
         .catch(error => console.log(error))
