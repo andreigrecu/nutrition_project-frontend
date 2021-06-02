@@ -47,6 +47,9 @@ class NewUserData extends Component {
             alertWeightGoal: false,
             alertWeightEmpty: false,
             alertEmptyHeight: false,
+
+            alertStrangeWeight: false,
+            alertStrangeHeight: false
         };
     }
     
@@ -55,6 +58,12 @@ class NewUserData extends Component {
         let makeCall = true;
 
         if(this.state.age < 18) {
+            this.setState({ underAge: true});
+            makeCall = false;
+        } else 
+            this.setState({ underAge: false });
+
+        if(this.state.age > 100) {
             this.setState({ underAge: true});
             makeCall = false;
         } else 
@@ -139,6 +148,18 @@ class NewUserData extends Component {
             makeCall = false;
         } else 
             this.setState({ alertWeightGoal: false });
+
+        if(this.state.userWeight > 200 || this.state.userWeight < 30) {
+            this.setState({ alertStrangeWeight: true });
+            makeCall = false;
+        } else
+            this.setState({ alertStrangeWeight: false });
+
+        if(this.state.userHeight > 260 || this.state.userHeight < 80) {
+            this.setState({ alertStrangeHeight: true });
+            makeCall = false;
+        } else
+            this.setState({ alertStrangeHeight: false });
 
         if(this.state.emptyWeight) {
             this.setState({ alertWeightEmpty: true });
@@ -294,9 +315,11 @@ class NewUserData extends Component {
             underAge,
             alertWeightGoal,
             alertWeightEmpty,
-            alertEmptyHeight
-         } = this.state;
-
+            alertEmptyHeight,
+            alertStrangeWeight,
+            alertStrangeHeight
+        } = this.state;
+        
         return (
             <div>
                 <Modal show={showModalUserData} onHide={() => {}} centered keyboard={true}> 
@@ -334,7 +357,7 @@ class NewUserData extends Component {
                             </Form.Group>
                             {
                                 alertAge === true || underAge === true
-                                ? <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>You are under age or you introduced a wrong age!</h6>
+                                ? <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>You are under age or you introduced a wrong or really big age!</h6>
                                 : ( <div></div> )
                             }
 
@@ -377,7 +400,7 @@ class NewUserData extends Component {
 
                 <Modal show={showModalUserGoals} onHide={() => {}} centered keyboard={true}> 
                     <Modal.Header>
-                        <Modal.Title>A little more about you</Modal.Title>
+                        <h3>A little more about you</h3>
                     </Modal.Header>
                     <Modal.Body>
                         <Form.Label style={{'color': 'black', 'paddingBottom': '5%'}}>
@@ -391,7 +414,9 @@ class NewUserData extends Component {
                             {
                                 alertWeightEmpty === true
                                 ? <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>Please enter you current weight!</h6>
-                                : ( <div></div> )
+                                : ( alertStrangeWeight === true && 
+                                    <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>Your weight might be wrong. Please try again!</h6>
+                                )
                             }
                             <Form.Group controlId="formDesiredWeight">
                                 <Form.Label>What is your desired weight? [kg]</Form.Label>
@@ -411,7 +436,11 @@ class NewUserData extends Component {
                                 alertEmptyHeight === true
                                 ? <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>
                                     Please choose your height!</h6>
-                                : (<div></div>)    
+                                : (
+                                    alertStrangeHeight === true &&
+                                        <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>
+                                        Your height might be wrong. Please try again!</h6>
+                                )    
                             }
                             {/* <Form.Group controlId="formTime">
                                 <Form.Label>How fast do you wish you wish to achieve your goal? [days]</Form.Label>
