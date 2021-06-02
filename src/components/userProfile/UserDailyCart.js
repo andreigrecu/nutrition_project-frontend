@@ -201,6 +201,7 @@ class UserDailyCart extends Component {
                                                     <ListGroup.Item
                                                         key={`index-${index}`}
                                                         onClick={() => this.onMealClick(meal, mealType, index)}
+                                                        style={{'cursor': 'pointer'}}
                                                     >
                                                         <Container fluid={true} className="p-0">
                                                             <Row noGutters>
