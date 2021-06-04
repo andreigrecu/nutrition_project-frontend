@@ -7,6 +7,8 @@ import Button from 'react-bootstrap/Button';
 import PosibilitiesModal from './PosibilitiesModal';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 
 class DailyCaloriesCounter extends Component {
 
@@ -21,7 +23,10 @@ class DailyCaloriesCounter extends Component {
             fatsGramsGoal: 0,
             proteinsGramsGoal: 0,
 
-            hasProgram: false
+            hasProgram: false,
+            showWorkoutModal: false,
+            burnedCalories: 0,
+            alertWrongValue: false
         };
     }
 
@@ -100,6 +105,43 @@ class DailyCaloriesCounter extends Component {
         }
     }
 
+    onAddWorkoutClick = () => {
+
+        this.setState({ showWorkoutModal: true });
+    }
+
+    onHideWorkoutModal = () => {
+        this.setState({ showWorkoutModal: false, alertWrongValue: false });
+    }
+
+    onBurnedCaloriesClick = () => {
+        if((parseInt(this.state.burnedCalories) >= 0 && parseInt(this.state.burnedCalories) <= 4000) ||
+            (parseInt(this.state.burnedCalories) <= 0 && parseInt(this.state.burnedCalories) >= -4000)) {
+            
+                fetch(`http://localhost:4400/users/${this.props.user.id}/updateWorkout`, {
+                    method: 'put',
+                    headers: {'Content-type': 'application/json'},
+                    body: JSON.stringify({
+                        workoutVal: parseInt(this.state.burnedCalories),
+                    })
+                })
+                    .then(response => response.json())
+                    .then(response => {
+                        if(response['statusCode'] && parseInt(response['statusCode']) !== 200)
+                            console.log("ERROR: " + response['message'] + "of status code " + response['statusCode']);
+                        this.setState({showWorkoutModal: false });
+                        this.props.getGraphicData();
+                    })
+                    .catch(error => console.log(error))
+        }
+        else
+            this.setState({ alertWrongValue: true });
+    }
+
+    setBurnedCalories = (event) => {
+        this.setState({ burnedCalories: event.target.value, alertWrongValue: false });
+    }
+
     render() {
         
         const {
@@ -107,7 +149,9 @@ class DailyCaloriesCounter extends Component {
             calculatorType,
             carbosGramsGoal,
             fatsGramsGoal,
-            proteinsGramsGoal
+            proteinsGramsGoal,
+            showWorkoutModal,
+            alertWrongValue
         } = this.state;
 
         let showUserBMR = parseFloat(this.props.userBMR);
@@ -142,6 +186,33 @@ class DailyCaloriesCounter extends Component {
 
         return(
             <Container fluid={true} className="p-0">
+                <Modal show={showWorkoutModal} onHide={this.onHideWorkoutModal} centered keyboard={true}> 
+                    <Modal.Header>
+                        <h4>Enter your burned calories!</h4>
+                        {
+                            alertWrongValue === true &&
+                                <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>You introduced a wrong value. Try again!</h6>
+                        }
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Container fluid={true} className="p-0">
+                            <Row noGutters>
+                                <Col sm="1"></Col>
+                                <Col sm="4">
+                                    <Form.Control size="sm" type="text" onChange={this.setBurnedCalories} />
+                                </Col>
+                                <Col sm="1"></Col>
+                                <Col sm="3">
+                                    <h6>Good Job!</h6>
+                                </Col>
+                                <Col sm="3"></Col>
+                            </Row>
+                        </Container>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={this.onBurnedCaloriesClick}>Add</Button>
+                    </Modal.Footer>
+                </Modal>
                 <hr style={{'margin': '0'}}></hr>
                 <Row noGutters>
                     <Col sm="2" className="changeMeasureType">
@@ -159,7 +230,7 @@ class DailyCaloriesCounter extends Component {
                             <Dropdown.Item 
                                 onClick={() => this.onChangeCalculatorType('Fats')}
                             >
-                            Fats
+                                Fats
                             </Dropdown.Item>
                             <Dropdown.Item 
                                 onClick={() => this.onChangeCalculatorType('Proteins')}
@@ -168,11 +239,19 @@ class DailyCaloriesCounter extends Component {
                             </Dropdown.Item>
                         </DropdownButton>
                     </Col>
-                    <Col sm = "1"></Col>
-                    <Col sm="1">
-                        <Button onClick={this.popModalPosibilities} style={{'textAlign': 'center'}}>+</Button>
+                    <Col sm="7"></Col>
+                    <Col sm="1" style={{'textAlign': 'right'}}>
+                        <Button onClick={this.popModalPosibilities}>+</Button>
                     </Col>
-                    <Col sm="8"></Col>
+                    <Col sm="2" style={{'textAlign': 'right'}}>
+                        <Button 
+                            variant="primary" 
+                            style={{'textAlign': 'right'}} 
+                            onClick={this.onAddWorkoutClick}
+                        >
+                            Add Workout
+                        </Button>
+                    </Col>
                 </Row>
                 <Row noGutters>
                     <Col sm="2" className="align">
@@ -209,10 +288,20 @@ class DailyCaloriesCounter extends Component {
                         }
                         <div className="counterText">Food</div>
                     </Col>
-                    <Col sm="1" className="align">+</Col>
+                    <Col sm="1" className="align">
+                    {
+                            calculatorType === 'Calories Remaining' &&
+                            <div>+</div>
+                    }
+                    </Col>
                     <Col sm="2" className="align">
-                        <div>0</div>
-                        <div className="counterText">Exercise</div>
+                        {
+                            calculatorType === 'Calories Remaining' &&
+                            <div>
+                                <div>{this.props.todayWorkout}</div>
+                                <div className="counterText">Exercise</div>
+                            </div>
+                        }
                     </Col>
                     <Col sm="1" className="align">=</Col>
                     <Col sm="2" className="align">
