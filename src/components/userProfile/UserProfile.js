@@ -27,7 +27,8 @@ class UserProfile extends Component {
             caloriesConsumed: [],
             carbosConsumed: [],
             fatsConsumed: [],
-            proteinsConsumed: []
+            proteinsConsumed: [],
+            workoutValues: []
         };
     }
 
@@ -41,6 +42,7 @@ class UserProfile extends Component {
         let carbosConsumedArray = [];
         let fatsConsumedArray = [];
         let proteinsConsumedArray = [];
+        let workoutValuesArray = [];
 
         fetch(`http://localhost:4400/users/${this.props.user.id}/last7DaysMeals`, {
             method: 'get'
@@ -68,12 +70,16 @@ class UserProfile extends Component {
                             proteinsGoalArray[meal] = response['data'][meal]['proteinsGoal'];
                         else
                             proteinsGoalArray[meal] = 0;
-                                
+                        if(response['data'][meal]['workout'])
+                            workoutValuesArray[meal] = response['data'][meal]['workout'];
+                        else
+                            workoutValuesArray[meal] = 0;
                     }
                     this.setState({ caloriesGoal: caloriesGoalArray });
                     this.setState({ carbosGoal: carbosGoalArray });
                     this.setState({ fatsGoal: fatsGoalArray });
                     this.setState({ proteinsGoal: proteinsGoalArray });
+                    this.setState({ workoutValues: workoutValuesArray });
                 }
             })
             .catch(error => console.log(error))
@@ -121,12 +127,10 @@ class UserProfile extends Component {
                             fatsStatus: response['data']['fats']['totalFats'],
                             proteinsStatus: response['data']['proteins']['totalProteins']
                         })
+                        this.getGraphicData();
                     }
                 })
                 .catch(error => console.log(error))
-
-            this.getGraphicData();
-
         }
     }
 
@@ -180,6 +184,7 @@ class UserProfile extends Component {
             carbosStatus,
             fatsStatus,
             proteinsStatus,
+            workoutValues
         } = this.state;
 
         const dates = this.Last7Days();
@@ -187,37 +192,37 @@ class UserProfile extends Component {
             {
               name: dates[6],
               caloriesGoal: this.state.caloriesGoal[6] || 0 ,
-              caloriesConsumed: this.state.caloriesConsumed[6] || 0
+              caloriesConsumed: (this.state.caloriesConsumed[6] - workoutValues[6]) || 0
             },
             {
               name: dates[5],
               caloriesGoal: this.state.caloriesGoal[5] || 0,
-              caloriesConsumed: this.state.caloriesConsumed[5] || 0
+              caloriesConsumed: (this.state.caloriesConsumed[5] - workoutValues[5]) || 0
             },
             {
               name: dates[4],
               caloriesGoal: this.state.caloriesGoal[4] || 0,
-              caloriesConsumed: this.state.caloriesConsumed[4] || 0
+              caloriesConsumed: (this.state.caloriesConsumed[4] - workoutValues[4]) || 0
             },
             {
               name: dates[3],
               caloriesGoal: this.state.caloriesGoal[3] || 0,
-              caloriesConsumed: this.state.caloriesConsumed[3] || 0
+              caloriesConsumed: (this.state.caloriesConsumed[3] - workoutValues[3]) || 0
             },
             {
               name: dates[2],
               caloriesGoal: this.state.caloriesGoal[2] || 0,
-              caloriesConsumed: this.state.caloriesConsumed[2] || 0
+              caloriesConsumed: (this.state.caloriesConsumed[2] - workoutValues[2]) || 0
             },
             {
               name: dates[1],
               caloriesGoal: this.state.caloriesGoal[1] || 0,
-              caloriesConsumed: this.state.caloriesConsumed[1] || 0
+              caloriesConsumed: (this.state.caloriesConsumed[1] - workoutValues[1]) || 0
             },
             {
               name: dates[0],
               caloriesGoal: this.state.caloriesGoal[0] || 0,
-              caloriesConsumed: this.state.caloriesConsumed[0] || 0
+              caloriesConsumed: (this.state.caloriesConsumed[0] - workoutValues[0]) || 0
             },
         ];
 
@@ -365,7 +370,9 @@ class UserProfile extends Component {
                         carbosStatus={carbosStatus}
                         fatsStatus={fatsStatus}
                         proteinsStatus={proteinsStatus}
-                     />
+                        getGraphicData={this.getGraphicData}
+                        todayWorkout={workoutValues[0]}
+                    />
                 </Row>
                 <Row>
                     <UserDailyCart
