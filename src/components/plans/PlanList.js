@@ -67,6 +67,7 @@ class PlanList extends Component {
     }
 
     handleShow = (userProgramId) => {
+
         this.setState({ showPlanDetails: true })
         fetch(`http://localhost:4400/users/${this.props.user.id}/userInfo`, {
             method: 'get'
@@ -74,21 +75,55 @@ class PlanList extends Component {
             .then(response => response.json())
             .then(response => {
                 if(response['data'] && (response['data']['programId'] === userProgramId)) {
-                    this.setState({ activeProgram: true });
                     this.setState({ proteinPercent: response['data']['proteinsPercent'] });
                     this.setState({ fatsPercent: response['data']['fatsPercent'] });
                     this.setState({ carbosPercent: response['data']['carbohydratesPercent'] });
+
+                    fetch(`http://localhost:4400/programs/${userProgramId}`, {
+                        method: 'get'
+                    })
+                        .then(response => response.json())
+                        .then(response => {
+                            if(response['statusCode'] && parseInt(response['statusCode']) !== 200) {
+                                console.log("ERROR: " + response['message'] + ' of status code ' + response['statusCode']);
+                            }
+                            else {
+                                this.setState({ activeProgram: response['data']['name'] });
+                            }
+                        })
+                        .catch(error => console.log(error))
                 } else {
-                    //aici ar trb sa iau de la fiecare program in parte numarul de nutrienti
-                    //pentru ca nu toate programele o sa aibe 50,20,30
-                    this.setState({ activeProgram: false });
-                    this.setState({ proteinPercent: nutritionalValue.PROTEINS });
-                    this.setState({ fatsPercent: nutritionalValue.FATS });
-                    this.setState({ carbosPercent: nutritionalValue.CARBOHYDRATES });
+
+                    fetch(`http://localhost:4400/programs/${userProgramId}`, {
+                        method: 'get'
+                    })
+                        .then(response => response.json())
+                        .then(response => {
+                            if(response['statusCode'] && parseInt(response['statusCode']) !== 200) {
+                                console.log("ERROR: " + response['message'] + ' of status code ' + response['statusCode']);
+                            }
+                            else {
+                                if(response['data']['carbosPercent'])
+                                    this.setState({ carbosPercent: response['data']['carbosPercent'] });
+                                else
+                                    this.setState({ carbosPercent: nutritionalValue.CARBOHYDRATES });
+                                
+                                if(response['data']['fatsPercent'])
+                                    this.setState({ fatsPercent: response['data']['fatsPercent'] });
+                                else
+                                    this.setState({ fatsPercent: nutritionalValue.FATS });
+
+                                if(response['data']['proteinsPercent'])
+                                    this.setState({ proteinPercent: response['data']['proteinsPercent'] });
+                                else
+                                    this.setState({ proteinPercent: nutritionalValue.PROTEINS });   
+                                this.setState({ activeProgram: response['data']['name'] });          
+                            }
+                        })
+                        .catch(error => console.log(error))
                 }
             })
             .catch(error => console.log(error))
-
     }
 
     setStateProgramChosen = (id) => {
@@ -212,9 +247,10 @@ class PlanList extends Component {
                 else 
                     this.setState({ programName: ' ' });
             })
-        .catch(error => console.log(error))
+            .catch(error => console.log(error));
+
         this.handleHide();
-        this.setState({ activeProgram: false });
+        this.setState({ activeProgram: '' });
     }
 
     render() {
@@ -228,7 +264,7 @@ class PlanList extends Component {
             wrongPercents,
             activeProgram,
             modifiedNutrients,
-            programName
+            programName,
         } = this.state;
 
         return (
@@ -261,7 +297,7 @@ class PlanList extends Component {
                                     <Row>
                                         <Col sm="2" style={{'paddingTop': '3%'}}>
                                             {   
-                                                activeProgram === true ?
+                                                activeProgram === programName ?
                                                 <h6 style={{'color': 'blue'}}>active</h6>
                                                 : (<div></div>)
                                             }
@@ -310,7 +346,7 @@ class PlanList extends Component {
                                         <Col sm="7"></Col>
                                         <Col sm="5" className="modifyNutrientsBtn">
                                             {
-                                                activeProgram === true ? 
+                                                activeProgram === programName ? 
                                                     <Button variant="outline-dark" size="sm" onClick={this.modifyNutrients}>Modify your nutrients</Button>                                                    
                                                 :(<div></div>)
                                             }
@@ -333,7 +369,7 @@ class PlanList extends Component {
                                             <Col sm="2" className="btn">
                                                 <Button variant="outline-dark" size="sm" onClick={this.checkSumAndActivate}>
                                                     {
-                                                        activeProgram === true ?
+                                                        activeProgram === programName ?
                                                             'Reactivate'
                                                         :(
                                                             'Activate'
@@ -349,7 +385,7 @@ class PlanList extends Component {
                                             <Col sm="5"></Col>
                                             <Col sm="3">
                                                 {
-                                                    activeProgram === true ?
+                                                    activeProgram === programName ?
                                                         <Button variant="outline-dark" size="sm" onClick={this.disableProgram}>
                                                             Disable program
                                                         </Button> 
