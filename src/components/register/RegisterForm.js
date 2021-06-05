@@ -215,11 +215,6 @@ class RegisterForm extends Component {
                     <Button variant="primary" onClick={this.onSubmitSignIn}>
                         Submit
                     </Button>
-
-                    <Form.Group controlId="forgotPassword">
-                        <Form.Label style={{'paddingRight': '2%', 'paddingTop': '5%'}}>Forgot password?</Form.Label>
-                        <button type="button" className="btnLink">Click here</button> 
-                    </Form.Group>
                 
                 </Form>
 
