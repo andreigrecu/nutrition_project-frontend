@@ -71,6 +71,10 @@ class SignInForm extends Component {
         }
     }
 
+    onForgotPassword = () => {
+        this.props.history.push('/forgotPassword');
+    }
+
     render() {
 
         const { 
@@ -112,7 +116,7 @@ class SignInForm extends Component {
                 </Form.Group>
 
                 <div style={{'textAlign': 'right'}}>
-                    <Button variant="link">Forgot Password?</Button>
+                    <Button variant="link" onClick={this.onForgotPassword}>Forgot Password?</Button>
                 </div>
 
                 <Button variant="primary" block style={{'marginTop': '8%'}} onClick={this.onSubmitSignIn}>Submit</Button>

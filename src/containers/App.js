@@ -14,6 +14,8 @@ import PlanList from '../components/plans/PlanList';
 import ls from 'local-storage';
 import ChangePassword from '../components/changePassword/ChangePassword';
 import UserInfo from '../components/userInfo/UserInfo';
+import ForgotPassword from '../components/forgotPassword/ForgotPassword';
+import ResetPassword from '../components/forgotPassword/ResetPassword';
 
 const initialState = {
   user: {
@@ -107,6 +109,16 @@ class App extends Component {
               loadUser={this.loadUser} 
               setMealType={this.setMealType} 
               setUserBMR={this.setUserBMR} 
+            />
+          )} />
+          <Route path="/forgotPassword" exact render={(props) => (
+            <ForgotPassword {... props}
+              user={state.user}
+            />
+          )} />
+           <Route path="/reset/:id" exact render={(props) => (
+            <ResetPassword {... props}
+              user={state.user}
             />
           )} />
           <Route path="/users/plans" exact render={(props) => (
