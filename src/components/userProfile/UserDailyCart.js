@@ -25,7 +25,9 @@ class UserDailyCart extends Component {
 
             servingModal: false,
             mealType: '',
-            indexDelete: ''
+            indexDelete: '',
+
+            alertWrongServingsNumberFormat: false
         }
     }
 
@@ -111,7 +113,14 @@ class UserDailyCart extends Component {
     }
 
     setNumberOfServings = (numberOfServings) => {
-        this.setState({ numberOfServings: numberOfServings, servingModal: false });
+        if(parseInt(numberOfServings) >= 0 && parseInt(numberOfServings) <= 100)
+            this.setState({ numberOfServings: numberOfServings, servingModal: false });
+        else 
+            this.setState({ alertWrongServingsNumberFormat: true });
+    }
+
+    stopAlertingServings = () => {
+        this.setState({ alertWrongServingsNumberFormat: false });
     }
 
     showServingModal = () => {
@@ -119,7 +128,7 @@ class UserDailyCart extends Component {
     }
 
     hideServingModal = () => {
-        this.setState({ servingModal: false });
+        this.setState({ servingModal: false, alertWrongServingsNumberFormat: false,  });
     }
 
     deleteFoodFromCart = () => {
@@ -160,7 +169,8 @@ class UserDailyCart extends Component {
             nrProteins,
             numberOfServings,
             servingModal,
-            mealType
+            mealType,
+            alertWrongServingsNumberFormat
         } = this.state;
 
         return (
@@ -184,6 +194,9 @@ class UserDailyCart extends Component {
                     servingModal={servingModal}
                     buttonType={'delete'}
                     deleteFoodFromCart={this.deleteFoodFromCart}
+                    stopAlertingServings={this.stopAlertingServings}
+                    alertWrongServingsNumberFormat={alertWrongServingsNumberFormat}
+                    comingFrom={"delete"}
                 />
                 <Modal show={todayMealsModal} onHide={this.handleCloseTodayMealsModal}>
                     <Modal.Header closeButton>

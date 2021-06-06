@@ -57,13 +57,7 @@ class NewUserData extends Component {
 
         let makeCall = true;
 
-        if(this.state.age < 18) {
-            this.setState({ underAge: true});
-            makeCall = false;
-        } else 
-            this.setState({ underAge: false });
-
-        if(this.state.age > 100) {
+        if(parseInt(this.state.age) < 18 || parseInt(this.state.age) > 100) {
             this.setState({ underAge: true});
             makeCall = false;
         } else 
@@ -356,9 +350,8 @@ class NewUserData extends Component {
                                 <Form.Control size="sm" onChange={this.onAgeChange} />
                             </Form.Group>
                             {
-                                alertAge === true || underAge === true
-                                ? <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>You are under age or you introduced a wrong or really big age!</h6>
-                                : ( <div></div> )
+                                (alertAge === true || underAge === true) &&
+                                    <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>You are under age or you introduced a wrong or really big age!</h6>
                             }
 
                             <fieldset>
