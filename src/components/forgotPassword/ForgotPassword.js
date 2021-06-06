@@ -81,7 +81,7 @@ class ForgotPassword extends Component {
                     <Col sm="6">
                     {
                         alertEmailSent === true &&
-                            <h4 style={{'paddingTop': '10%'}}>An email with instructions was sent to your email address!</h4>
+                            <h4 style={{'paddingTop': '10%', 'textAlign': 'center'}}>An email with instructions was sent to your email address!</h4>
                     }
                     </Col>
                     <Col sm="3"></Col>

@@ -17,6 +17,11 @@ class ServingModal extends Component {
 
     setServings = (event) => {
         this.setState({ nrServings: event.target.value });
+        if(this.props.comingFrom && this.props.comingFrom === "delete")
+            this.props.stopAlertingServings();
+
+        if(this.props.from && this.props.from === "add")
+            this.props.stopAlertingTheNumberOfServingsFormat();
     }
 
     render() {
@@ -30,7 +35,7 @@ class ServingModal extends Component {
                         <Row noGutters>
                             <Col sm="1"></Col>
                             <Col sm="4">
-                                <Form.Control size="sm" type="text" placeholder="1" onChange={this.setServings} />
+                                <Form.Control size="sm" type="text" onChange={this.setServings} />
                             </Col>
                             <Col sm="1"></Col>
                             <Col sm="3">
@@ -43,6 +48,14 @@ class ServingModal extends Component {
                             <Col sm="2">
                             </Col>
                         </Row>
+                        {
+                            this.props.alertWrongServingsNumberFormat === true &&
+                                <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>You introduced a wrong value! Please try again.</h6>
+                        }
+                        {
+                            this.props.alertNumberOfServingsFormat === true &&
+                                <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>You introduced a wrong value! Please try again.</h6>
+                        }
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>

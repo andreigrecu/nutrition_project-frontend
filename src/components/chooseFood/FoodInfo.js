@@ -139,6 +139,12 @@ class FoodInfo extends Component {
                     servingModal={servingModal}
                     hideServingModal={this.props.hideServingModal}
                     setNumberOfServings={this.props.setNumberOfServings}
+                    stopAlertingServings={this.props.stopAlertingServings}
+                    alertWrongServingsNumberFormat={this.props.alertWrongServingsNumberFormat}
+                    comingFrom={this.props.comingFrom}
+                    from={this.props.from}
+                    stopAlertingTheNumberOfServingsFormat={this.props.stopAlertingTheNumberOfServingsFormat}
+                    alertNumberOfServingsFormat={this.props.alertNumberOfServingsFormat}
                 />
                 <Modal show={this.props.showFoodInfoModal} onHide={this.props.handleCloseFoodInfoModal} centered keyboard={true}> 
                     <Modal.Header closeButton>
@@ -279,7 +285,7 @@ class FoodInfo extends Component {
                                             <div className="footer-links">
                                                 <div className='box white'></div>
                                                 <h6>Calories</h6>
-                                                <h6 style={{'float': 'right'}}> { (this.props.nrCalories * numberOfServings).toFixed(2) } g</h6>
+                                                <h6 style={{'float': 'right'}}> { (this.props.nrCalories * numberOfServings).toFixed(2) }</h6>
                                             </div>
                                         }
                                         <div className="footer-links">

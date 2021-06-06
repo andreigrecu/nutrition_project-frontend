@@ -58,7 +58,9 @@ class SearchFood extends Component {
             historyClickedItem: '',
 
             numberOfServings: 1,
-            servingModal: false
+            servingModal: false,
+
+            alertNumberOfServingsFormat: false
         };
         ls.set('offset', 0);
         ls.set('active', 1);
@@ -409,7 +411,14 @@ class SearchFood extends Component {
     }
 
     setNumberOfServings = (numberOfServings) => {
-        this.setState({ numberOfServings: numberOfServings, servingModal: false });
+        if(parseInt(numberOfServings) >= 0 && parseInt(numberOfServings) <= 100)
+            this.setState({ numberOfServings: numberOfServings, servingModal: false });
+        else
+            this.setState({ alertNumberOfServingsFormat: true });
+    }
+
+    stopAlertingTheNumberOfServingsFormat = () => {
+        this.setState({ alertNumberOfServingsFormat: false });
     }
 
     showServingModal = () => {
@@ -417,7 +426,7 @@ class SearchFood extends Component {
     }
 
     hideServingModal = () => {
-        this.setState({ servingModal: false });
+        this.setState({ servingModal: false, alertNumberOfServingsFormat: false });
     }
 
 
@@ -441,7 +450,8 @@ class SearchFood extends Component {
             historyData,
             historyClickedItem,
             numberOfServings,
-            servingModal
+            servingModal,
+            alertNumberOfServingsFormat
         } = this.state;
 
         if(clickedQuery === "") {
@@ -470,6 +480,9 @@ class SearchFood extends Component {
                         numberOfServings={numberOfServings}
                         servingModal={servingModal}
                         buttonType={''}
+                        alertNumberOfServingsFormat={alertNumberOfServingsFormat}
+                        stopAlertingTheNumberOfServingsFormat={this.stopAlertingTheNumberOfServingsFormat}
+                        from={"add"}
                     /> :(
                         <FoodInfo 
                             showFoodInfoModal={showFoodInfoModal} 
@@ -489,6 +502,9 @@ class SearchFood extends Component {
                             numberOfServings={numberOfServings}
                             servingModal={servingModal}
                             buttonType={''}
+                            alertNumberOfServingsFormat={alertNumberOfServingsFormat}
+                            stopAlertingTheNumberOfServingsFormat={this.stopAlertingTheNumberOfServingsFormat}
+                            from={"add"}
                         />
                     )
                 }

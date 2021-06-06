@@ -39,8 +39,7 @@ class SignInPage extends Component {
                     <Row>
                         <Col sm="3"></Col>
                         <Col sm="6" >
-                            <h6 className="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam.</h6>
+                            <h6 className="text">Until you get your nutrition right, nothing is going to change.</h6>
                         </Col>
                         <Col sm="3"></Col>
                     </Row>

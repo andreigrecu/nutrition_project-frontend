@@ -399,14 +399,16 @@ class UserProfile extends Component {
                     </Col>
                 </Row>
                 <Row noGutters style={{'paddingTop': '3%', 'paddingBottom': '2%'}}>
-                    <Col sm="6">
+                    <Col sm="2"></Col>
+                    <Col sm="4">
                         <h3>Last week fats tracker</h3>
                         <GoalGraphic 
                             fatsData={fatsData}
                             type={"FatsGraphic"}
                         />
                     </Col>
-                    <Col sm="6">
+                    <Col sm="2"></Col>
+                    <Col sm="4">
                         <h3>Last week proteins tracker</h3>
                         <GoalGraphic 
                             proteinsData={proteinsData}
