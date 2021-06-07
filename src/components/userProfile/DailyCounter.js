@@ -63,22 +63,22 @@ class DailyCaloriesCounter extends Component {
 
     calculateBMR = (userInfo) => {
 
-        let percentage = 0;
-        if(userInfo['data'] && userInfo['data']['program']['percentageType'])
-            percentage = userInfo['data']['program']['percentageType'] - 100;
+        let adjustment = 0;
+        if(userInfo['data'] && userInfo['data']['program']['caloriesAdjustment'])
+            adjustment = userInfo['data']['program']['caloriesAdjustment'];
 
         let sameBMR =  10 * userInfo['data']['weight'] + 
             6.25 * userInfo['data']['height'] - 5 * userInfo['data']['age'];
 
         if(userInfo['data']['gender'] === 'male') {
             sameBMR = sameBMR + 5;
-            sameBMR = (sameBMR + ((percentage * sameBMR) / 100));
+            sameBMR = sameBMR + adjustment;
 
             if(userInfo['data'] && userInfo['data']['programId'] && userInfo['data']['programId'] !== null && userInfo['data']['programId'] !== " ")
                 this.setState({ userBMR: sameBMR });
         } else if(userInfo['data']['gender'] === 'female') {
             sameBMR = sameBMR - 161;
-            sameBMR = (sameBMR + ((percentage * sameBMR) / 100));
+            sameBMR = sameBMR + adjustment;
             if(userInfo['data'] && userInfo['data']['programId'] && userInfo['data']['programId'] !== null && userInfo['data']['programId'] !== " ")
                 this.setState({ userBMR: sameBMR });
         }
