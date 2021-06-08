@@ -34,7 +34,7 @@ class MiddleComponent extends Component {
                                 />
                                 <Carousel.Caption>
                                 <h3>Be healthy</h3>
-                                <p>Register for a free month of our full nutrition program.</p>
+                                <p>Register and test the app's functionalities.</p>
                                 </Carousel.Caption>
                             </Carousel.Item>
                             <Carousel.Item>
@@ -48,7 +48,7 @@ class MiddleComponent extends Component {
 
                                 <Carousel.Caption>
                                 <h3>Start your transformation now</h3>
-                                <p>Start your physique and mental transformation with a little help from us.</p>
+                                <p>Start your physical and mental transformation with a little help from us.</p>
                                 </Carousel.Caption>
                             </Carousel.Item>
 

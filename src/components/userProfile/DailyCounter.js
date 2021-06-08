@@ -17,7 +17,7 @@ class DailyCaloriesCounter extends Component {
         this.state = {
             userBMR: 0,
             showPosibilitiesModal: false,
-            calculatorType: 'Calories Remaining',
+            calculatorType: 'Remaining Calories',
 
             carbosGramsGoal: 0,
             fatsGramsGoal: 0,
@@ -31,7 +31,7 @@ class DailyCaloriesCounter extends Component {
     }
 
     onChangeCalculatorType = (type) => {
-        this.setState({ calculatorType: type + ' Remaining' });
+        this.setState({ calculatorType: 'Remaining ' + type  });
     }
 
     setNutrientsPercentage = (carbosPercentage, fatsPercentage, proteinsPercentage) => {
@@ -163,19 +163,19 @@ class DailyCaloriesCounter extends Component {
         let orangeDiffColor;
 
         switch(calculatorType) {
-            case('Calories Remaining'):
+            case('Remaining Calories'):
                 diffShow = diffCalories.toFixed();
                 orangeDiffColor = ((30 * (showUserBMR.toFixed())) / 100);
                 break;
-            case('Carbohydrates Remaining'):
+            case('Remaining Carbohydrates'):
                 diffShow = diffCarbos.toFixed();
                 orangeDiffColor = ((30 * carbosGramsGoal) / 100);
                 break;
-            case('Fats Remaining'):
+            case('Remaining Fats'):
                 diffShow = diffFats.toFixed();
                 orangeDiffColor = ((30 * fatsGramsGoal) / 100);
                 break;
-            case('Proteins Remaining'):
+            case('Remaining Proteins'):
                 diffShow = diffProteins.toFixed();
                 orangeDiffColor = ((30 * proteinsGramsGoal) / 100);
                 break;
@@ -239,17 +239,18 @@ class DailyCaloriesCounter extends Component {
                             </Dropdown.Item>
                         </DropdownButton>
                     </Col>
-                    <Col sm="7"></Col>
-                    <Col sm="1" style={{'textAlign': 'right'}}>
-                        <Button onClick={this.popModalPosibilities}>+</Button>
+                    <Col sm="1"></Col>
+                    <Col sm="2" style={{'textAlign': 'left'}}>
+                        <Button onClick={this.popModalPosibilities}>Search Food</Button>
                     </Col>
+                    <Col sm="5"></Col>
                     <Col sm="2" style={{'textAlign': 'right'}}>
                         <Button 
                             variant="primary" 
                             style={{'textAlign': 'right'}} 
                             onClick={this.onAddWorkoutClick}
                         >
-                            Add Workout
+                            Add Exercise
                         </Button>
                     </Col>
                 </Row>
@@ -257,70 +258,70 @@ class DailyCaloriesCounter extends Component {
                     <Col sm="2" className="align">
                         {
                             this.props.user.firstLogin === true ?
-                            <div>0</div> : (
+                            <h4>0</h4> : (
                                 this.props.userBMR ? 
-                                    calculatorType === 'Calories Remaining' ?
-                                        <div>{showUserBMR.toFixed()}</div> :
-                                    calculatorType === 'Carbohydrates Remaining' ?
-                                        <div>{carbosGramsGoal}</div> :
-                                    calculatorType === 'Fats Remaining' ?
-                                        <div>{fatsGramsGoal}</div> :
-                                    calculatorType === 'Proteins Remaining' &&
-                                        <div>{proteinsGramsGoal}</div>
-                                : (<div>0</div>)
+                                    calculatorType === 'Remaining Calories' ?
+                                        <h4>{showUserBMR.toFixed()}</h4> :
+                                    calculatorType === 'Remaining Carbohydrates' ?
+                                        <h4>{carbosGramsGoal}</h4> :
+                                    calculatorType === 'Remaining Fats' ?
+                                        <h4>{fatsGramsGoal}</h4> :
+                                    calculatorType === 'Remaining Proteins' &&
+                                        <h4>{proteinsGramsGoal}</h4>
+                                : (<h4>0</h4>)
                             )
                         }                       
-                        <div className="counterText">Goal</div>
+                        <h5 className="counterText">Your goal</h5>
                     </Col>
                     <Col sm="1" className="align">
-                        <div>-</div>
+                        <h2>-</h2>
                     </Col>
                     <Col sm="2" className="align">
                         {
-                            calculatorType === 'Calories Remaining' ?
-                                <div>{this.props.caloriesStatus.toFixed()}</div> :
-                            calculatorType === 'Carbohydrates Remaining' ?
-                                <div>{this.props.carbosStatus.toFixed()}</div> :
-                            calculatorType === 'Fats Remaining' ?   
-                                <div>{this.props.fatsStatus.toFixed()}</div> :
-                            calculatorType === 'Proteins Remaining' &&
-                                <div>{this.props.proteinsStatus.toFixed()}</div> 
+                            calculatorType === 'Remaining Calories' ?
+                                <h4>{this.props.caloriesStatus.toFixed()}</h4> :
+                            calculatorType === 'Remaining Carbohydrates' ?
+                                <h4>{this.props.carbosStatus.toFixed()}</h4> :
+                            calculatorType === 'Remaining Fats' ?   
+                                <h4>{this.props.fatsStatus.toFixed()}</h4> :
+                            calculatorType === 'Remaining Proteins' &&
+                                <h4>{this.props.proteinsStatus.toFixed()}</h4> 
                         }
-                        <div className="counterText">Food</div>
+                        <h5 className="counterText">From today meals</h5>
                     </Col>
                     <Col sm="1" className="align">
                     {
-                            calculatorType === 'Calories Remaining' &&
-                            <div>+</div>
+                            calculatorType === 'Remaining Calories' &&
+                            <h2>+</h2>
                     }
                     </Col>
                     <Col sm="2" className="align">
                         {
-                            calculatorType === 'Calories Remaining' &&
+                            calculatorType === 'Remaining Calories' &&
                             <div>
-                                <div>{this.props.todayWorkout}</div>
-                                <div className="counterText">Exercise</div>
+                                <h4>{this.props.todayWorkout}</h4>
+                                <h5 className="counterText">Burned calories</h5>
                             </div>
                         }
                     </Col>
-                    <Col sm="1" className="align">=</Col>
+                    <Col sm="1" className="align"><h2>=</h2></Col>
                     <Col sm="2" className="align">
                         {
                             this.props.user.firstLogin === true ?
-                            <div>{0 - this.props.caloriesStatus}</div> : (
+                            <h4>{0 - this.props.caloriesStatus}</h4> : (
                                 diffShow < -1 ?
-                                <div style={{'color': 'red'}}>{diffShow}</div> :
+                                <h4 style={{'color': 'red'}}>{diffShow}</h4> :
                                     diffShow <= 0 && diffShow > -1 ?
-                                        <div style={{'color': 'red'}}>{0}</div> 
+                                        <h4 style={{'color': 'red'}}>{0}</h4> 
                                             :(
                                                 diffShow < orangeDiffColor ?
-                                                <div style={{'color': 'orange'}}>{diffShow}</div> :(
-                                                    <div>{diffShow}</div>
+                                                <h4 style={{'color': 'orange'}}>{diffShow}</h4> :(
+                                                    <h4>{diffShow}</h4>
                                                 )
                                             )
                             )
                         }                     
-                        <div className="counterText">Total</div>
+                        <h5 className="counterText">Remained</h5>
                     </Col>
                 </Row>
                 <hr style={{'marginBottom': '0%'}}></hr>

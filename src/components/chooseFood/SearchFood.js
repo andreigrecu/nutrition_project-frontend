@@ -235,7 +235,7 @@ class SearchFood extends Component {
         }
 
 
-        let number=1;
+        let number=10;
         let offset=ls.get('offset');
         let autocompleted = [];
 
@@ -454,6 +454,13 @@ class SearchFood extends Component {
             alertNumberOfServingsFormat
         } = this.state;
 
+        let image = '';
+        if(historyClickedItem)
+            image = historyClickedItem['image'];
+        for(let i = 0; i < autocompletedItems.length; i++)
+            if(autocompletedItems[i]['name'] === itemsDetails['name'])
+                image = autocompletedItems[i]['image'];
+            
         if(clickedQuery === "") {
             clickedQuery = 'All';
         }
@@ -483,6 +490,7 @@ class SearchFood extends Component {
                         alertNumberOfServingsFormat={alertNumberOfServingsFormat}
                         stopAlertingTheNumberOfServingsFormat={this.stopAlertingTheNumberOfServingsFormat}
                         from={"add"}
+                        image={image}
                     /> :(
                         <FoodInfo 
                             showFoodInfoModal={showFoodInfoModal} 
@@ -505,6 +513,7 @@ class SearchFood extends Component {
                             alertNumberOfServingsFormat={alertNumberOfServingsFormat}
                             stopAlertingTheNumberOfServingsFormat={this.stopAlertingTheNumberOfServingsFormat}
                             from={"add"}
+                            image={image}
                         />
                     )
                 }
@@ -607,19 +616,27 @@ class SearchFood extends Component {
                                                                                     <Col sm="3"></Col>
                                                                                     <Col sm="3">
                                                                                         {
-                                                                                            item['images'] && item['images'][0] ?
+                                                                                           item['images'] && item['images'][0] ?
                                                                                                 item['title'] ?
                                                                                                     <img alt={item['title']} src={item['images'][0]} width="150" height="150" />
                                                                                                 :(
                                                                                                     <img alt={item['name']} src={item['images'][0]} width="150" height="150" />
                                                                                                 )
-                                                                                             :(
-                                                                                                item['title'] ?
-                                                                                                    <img alt={item['title']} src="https://spoonacular.com/recipeImages/667707-312x231.jpg" width="150" height="150" />
-                                                                                                    :(
-                                                                                                        <img alt={item['name']} src="https://spoonacular.com/recipeImages/667707-312x231.jpg" width="150" height="150" />
-                                                                                                    )
-                                                                                             )
+                                                                                           :(
+                                                                                               item['image'] ?
+                                                                                                   item['title'] ?
+                                                                                                       <img alt={item['title']} src={item['image']} width="150" height="150" />
+                                                                                                       :(
+                                                                                                           <img alt={item['name']} src={item['image']} width="150" height="150" />
+                                                                                                       ) 
+                                                                                               :(
+                                                                                                   item['title'] ?
+                                                                                                       <img alt={item['title']} src="https://spoonacular.com/recipeImages/667707-312x231.jpg" width="150" height="150" />
+                                                                                                       :(
+                                                                                                           <img alt={item['name']} src="https://spoonacular.com/recipeImages/667707-312x231.jpg" width="150" height="150" />
+                                                                                                       )
+                                                                                               )
+                                                                                           )
                                                                                         } 
                                                                                     </Col>
                                                                                 </Row>      

@@ -231,10 +231,18 @@ class UserDailyCart extends Component {
                                                                             <img alt={meal['name']} src={meal['images'][0]} width="50" height="50" />
                                                                         )
                                                                         :(
-                                                                        meal['title'] ?
-                                                                            <img alt={meal['title']} src="https://spoonacular.com/recipeImages/667707-312x231.jpg" width="50" height="50" />
+                                                                            meal['image'] ?
+                                                                                meal['title'] ?
+                                                                                    <img alt={meal['title']} src={meal['image']} width="50" height="50" />
+                                                                                    :(
+                                                                                        <img alt={meal['name']} src={meal['image']} width="50" height="50" />
+                                                                                    ) 
                                                                             :(
-                                                                                <img alt={meal['name']} src="https://spoonacular.com/recipeImages/667707-312x231.jpg" width="50" height="50" />
+                                                                                meal['title'] ?
+                                                                                    <img alt={meal['title']} src="https://spoonacular.com/recipeImages/667707-312x231.jpg" width="50" height="50" />
+                                                                                    :(
+                                                                                        <img alt={meal['name']} src="https://spoonacular.com/recipeImages/667707-312x231.jpg" width="50" height="50" />
+                                                                                    )
                                                                             )
                                                                         )
                                                                 } 
