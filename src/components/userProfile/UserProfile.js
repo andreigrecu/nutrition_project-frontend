@@ -18,7 +18,7 @@ class UserProfile extends Component {
             carbosStatus: 0,
             fatsStatus: 0,
             proteinsStatus: 0,
-            calculatorType: 'Calories Remaining',
+            calculatorType: 'Remaining Calories',
 
             caloriesGoal: [],
             carbosGoal: [],
@@ -93,10 +93,10 @@ class UserProfile extends Component {
                     console.log("ERROR: " + response['message'] + " of status code " + response['statusCode']);
                 else {
                     for(let i = 0; i < response['data'].length; i++) {
-                        caloriesConsumedArray.push(response['data'][i]['calories']['totalCalories']);
-                        carbosConsumedArray.push(response['data'][i]['carbohydrates']['totalCarbohydrates']);
-                        fatsConsumedArray.push(response['data'][i]['fats']['totalFats']);
-                        proteinsConsumedArray.push(response['data'][i]['proteins']['totalProteins']);
+                        caloriesConsumedArray.push(response['data'][i]['calories']['totalCalories'].toFixed());
+                        carbosConsumedArray.push(response['data'][i]['carbohydrates']['totalCarbohydrates'].toFixed());
+                        fatsConsumedArray.push(response['data'][i]['fats']['totalFats'].toFixed());
+                        proteinsConsumedArray.push(response['data'][i]['proteins']['totalProteins'].toFixed());
                     }
                     this.setState({ caloriesConsumed: caloriesConsumedArray });
                     this.setState({ carbosConsumed: carbosConsumedArray });
@@ -391,7 +391,7 @@ class UserProfile extends Component {
                         />
                     </Col>
                     <Col sm="6">
-                        <h3>Last week carbos tracker</h3>
+                        <h3>Last week carbohydrates tracker</h3>
                         <GoalGraphic 
                             carbosData={carbosData}
                             type={"CarbosGraphic"}

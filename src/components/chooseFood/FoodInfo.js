@@ -46,6 +46,7 @@ class FoodInfo extends Component {
             badges: this.props.itemsDetails.badges,
             description: this.props.itemsDetails.description,
             images: this.props.itemsDetails.images,
+            image: this.props.image,
             ingredientList: this.props.itemsDetails.ingredientList,
             ingredients: this.props.itemsDetails.ingredients,
             nutrition: this.props.itemsDetails.nutrition,
