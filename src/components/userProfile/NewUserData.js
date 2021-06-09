@@ -49,7 +49,13 @@ class NewUserData extends Component {
             alertEmptyHeight: false,
 
             alertStrangeWeight: false,
-            alertStrangeHeight: false
+            alertStrangeHeight: false,
+
+            activityTypeChosen: false,
+            sedentaryActivityType: false,
+            lightActiveActivityType: false,
+            veryActiveActivityType: false,
+            alertActivityTypeNotChecked: false
         };
     }
     
@@ -118,13 +124,27 @@ class NewUserData extends Component {
 
     calculateBMR = (userInfo) => {
 
-        const sameBMR =  10 * userInfo['data']['weight'] + 
+        let sameBMR =  10 * userInfo['data']['weight'] + 
             6.25 * userInfo['data']['height'] - 5 * userInfo['data']['age'];
 
+        let activityTypeAdjustment;
+        if(userInfo['activityType'] && userInfo['activityType'] === 'sedentary')
+            activityTypeAdjustment = 1.2;
+        if(userInfo['activityType'] && userInfo['activityType'] === 'lightlyActive')
+            activityTypeAdjustment = 1.375;
+        if(userInfo['activityType'] && userInfo['activityType'] === 'veryActive')
+            activityTypeAdjustment = 1.725;
+
         if(userInfo['data']['gender'] === 'male') {
-            return (sameBMR + 5);
+            sameBMR = sameBMR + 5;
+            sameBMR = sameBMR * activityTypeAdjustment;
+
+            return sameBMR;
         } else if(userInfo['data']['gender'] === 'female') {
-            return (sameBMR - 161);
+            sameBMR = sameBMR - 161;
+            sameBMR = sameBMR * activityTypeAdjustment;
+
+            return sameBMR;
         }
     }
 
@@ -135,6 +155,14 @@ class NewUserData extends Component {
             gender = 'male';
         if(this.state.genderFemale === true)
             gender = 'female';
+
+        let activityType = "";
+        if(this.state.sedentaryActivityType === true)
+            activityType = 'sedentary';
+        if(this.state.lightActiveActivityType === true)
+            activityType = 'lightlyActive';
+        if(this.state.veryActiveActivityType === true)
+            activityType = 'veryActive';
 
         let makeCall = true;
         if(this.state.emptyWeight === false && this.state.emptyDaysGoal === false && this.state.emptyWeightGoal === true) {
@@ -167,6 +195,13 @@ class NewUserData extends Component {
         } else 
             this.setState({ alertEmptyHeight: false });
 
+        if(this.state.activityTypeChosen === false) {
+            this.setState({ alertActivityTypeNotChecked: true });
+            makeCall = false;
+        }
+        else
+            this.setState({ alertActivityTypeNotChecked: false });
+
         if(makeCall === true) {
 
             const userInfo = {
@@ -186,6 +221,7 @@ class NewUserData extends Component {
 
             userInfo['userId'] = this.props.user.id;
             userInfo['gender'] = gender;
+            userInfo['activityType'] = activityType;
 
             fetch('http://localhost:4400/usersInfo',{
                 method: 'post',
@@ -265,6 +301,33 @@ class NewUserData extends Component {
         this.setState({ genderChosen: true });
     }
 
+    onSedentaryActivityTypeClick = () => {
+        this.setState({
+            activityTypeChosen: true,
+            sedentaryActivityType: true,
+            lightActiveActivityType: false,
+            veryActiveActivityType: false
+        });
+    }
+
+    onLightActiveActivityType = () => {
+        this.setState({
+            activityTypeChosen: true,
+            sedentaryActivityType: false,
+            lightActiveActivityType: true,
+            veryActiveActivityType: false
+        });
+    }
+
+    onVeryActiveActivityType = () => {
+        this.setState({
+            activityTypeChosen: true,
+            sedentaryActivityType: false,
+            lightActiveActivityType: false,
+            veryActiveActivityType: true
+        })
+    }
+
     onWeightChange = (event) => {
         this.setState({ userWeight: event.target.value });
         if(event.target.value)
@@ -311,7 +374,8 @@ class NewUserData extends Component {
             alertWeightEmpty,
             alertEmptyHeight,
             alertStrangeWeight,
-            alertStrangeHeight
+            alertStrangeHeight,
+            alertActivityTypeNotChecked
         } = this.state;
         
         return (
@@ -361,18 +425,18 @@ class NewUserData extends Component {
                                 </Form.Label>
                                 <Col sm={7}>
                                     <Form.Check
-                                    type="radio"
-                                    label="male"
-                                    name="formHorizontalRadios"
-                                    id="formHorizontalRadios1"
-                                    onClick={this.onMaleClick}
+                                        type="radio"
+                                        label="male"
+                                        name="formHorizontalRadios"
+                                        id="formHorizontalRadios1"
+                                        onClick={this.onMaleClick}
                                     />
                                     <Form.Check
-                                    type="radio"
-                                    label="female"
-                                    name="formHorizontalRadios"
-                                    id="formHorizontalRadios2"
-                                    onClick={this.onFemaleClick}
+                                        type="radio"
+                                        label="female"
+                                        name="formHorizontalRadios"
+                                        id="formHorizontalRadios2"
+                                        onClick={this.onFemaleClick}
                                     />
                                 </Col>
                                 </Form.Group>
@@ -434,6 +498,40 @@ class NewUserData extends Component {
                                         <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>
                                         Your height might be wrong. Please try again!</h6>
                                 )    
+                            }
+                            <fieldset>
+                                <Form.Group as={Row}>
+                                <Form.Label as="activityType" column sm={5}>
+                                    Choose your activity level
+                                </Form.Label>
+                                <Col sm={7}>
+                                    <Form.Check
+                                        type="radio"
+                                        label="Sedentary (little or no exercise)"
+                                        name="formPersonType"
+                                        id="formPersonTypeRadios1"
+                                        onClick={this.onSedentaryActivityTypeClick}
+                                    />
+                                    <Form.Check
+                                        type="radio"
+                                        label="Lightly active (light exercise/sports 1-3 days/week)"
+                                        name="formPersonType"
+                                        id="formPersonTypeRadios2"
+                                        onClick={this.onLightActiveActivityType}
+                                    />
+                                    <Form.Check
+                                        type="radio"
+                                        label="Very active (hard exercise/sports 6-7 days a week)"
+                                        name="formPersonType"
+                                        id="formPersonTypeRadios3"
+                                        onClick={this.onVeryActiveActivityType}
+                                    />
+                                </Col>
+                                </Form.Group>
+                            </fieldset>
+                            {
+                                alertActivityTypeNotChecked === true
+                                && <h6 style={{'color': 'red', 'fontSize': 'x-small'}}>Choose your activity type!</h6>
                             }
                             {/* <Form.Group controlId="formTime">
                                 <Form.Label>How fast do you wish you wish to achieve your goal? [days]</Form.Label>

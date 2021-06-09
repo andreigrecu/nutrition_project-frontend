@@ -66,19 +66,30 @@ class DailyCaloriesCounter extends Component {
         let adjustment = 0;
         if(userInfo['data'] && userInfo['data']['program']['caloriesAdjustment'])
             adjustment = userInfo['data']['program']['caloriesAdjustment'];
+        
+        let activityTypeAdjustment = 1;
+        if(userInfo['data']['activityType'] && userInfo['data']['activityType'] === 'sedentary')
+            activityTypeAdjustment = 1.2;
+        if(userInfo['data']['activityType'] && userInfo['data']['activityType'] === 'lightlyActive')
+            activityTypeAdjustment = 1.375;
+        if(userInfo['data']['activityType'] && userInfo['data']['activityType'] === 'veryActive')
+            activityTypeAdjustment = 1.725;
 
-        let sameBMR =  10 * userInfo['data']['weight'] + 
+
+        let sameBMR =   10 * userInfo['data']['weight'] + 
             6.25 * userInfo['data']['height'] - 5 * userInfo['data']['age'];
 
         if(userInfo['data']['gender'] === 'male') {
             sameBMR = sameBMR + 5;
+            sameBMR = sameBMR * activityTypeAdjustment;
             sameBMR = sameBMR + adjustment;
-
             if(userInfo['data'] && userInfo['data']['programId'] && userInfo['data']['programId'] !== null && userInfo['data']['programId'] !== " ")
                 this.setState({ userBMR: sameBMR });
         } else if(userInfo['data']['gender'] === 'female') {
             sameBMR = sameBMR - 161;
+            sameBMR = sameBMR * activityTypeAdjustment;
             sameBMR = sameBMR + adjustment;
+
             if(userInfo['data'] && userInfo['data']['programId'] && userInfo['data']['programId'] !== null && userInfo['data']['programId'] !== " ")
                 this.setState({ userBMR: sameBMR });
         }
@@ -155,7 +166,9 @@ class DailyCaloriesCounter extends Component {
         } = this.state;
 
         let showUserBMR = parseFloat(this.props.userBMR);
-        const diffCalories = showUserBMR.toFixed() - this.props.caloriesStatus;
+        let diffCalories = showUserBMR.toFixed() - this.props.caloriesStatus;
+        if(this.props.todayWorkout)
+            diffCalories += this.props.todayWorkout;
         const diffCarbos = carbosGramsGoal - this.props.carbosStatus;
         const diffFats = fatsGramsGoal - this.props.fatsStatus;
         const diffProteins = proteinsGramsGoal - this.props.proteinsStatus;
