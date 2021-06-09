@@ -55,19 +55,19 @@ class UserProfile extends Component {
                 else {
                     for(let meal = 0; meal < response['data'].length; meal++) {
                         if(response['data'][meal]['caloriesGoal'])
-                            caloriesGoalArray[meal] = response['data'][meal]['caloriesGoal'];
+                            caloriesGoalArray[meal] = response['data'][meal]['caloriesGoal'].toFixed();
                         else
                             caloriesGoalArray[meal] = 0;
                         if(response['data'][meal]['carbosGoal'])
-                            carbosGoalArray[meal] = response['data'][meal]['carbosGoal'];
+                            carbosGoalArray[meal] = response['data'][meal]['carbosGoal'].toFixed();
                         else
                             carbosGoalArray[meal] = 0;
                         if(response['data'][meal]['fatsGoal'])
-                            fatsGoalArray[meal] = response['data'][meal]['fatsGoal'];
+                            fatsGoalArray[meal] = response['data'][meal]['fatsGoal'].toFixed();
                         else
                             fatsGoalArray[meal] = 0;
                         if(response['data'][meal]['proteinsGoal'])
-                            proteinsGoalArray[meal] = response['data'][meal]['proteinsGoal'];
+                            proteinsGoalArray[meal] = response['data'][meal]['proteinsGoal'].toFixed();
                         else
                             proteinsGoalArray[meal] = 0;
                         if(response['data'][meal]['workout'])
