@@ -113,6 +113,8 @@ class UserDailyCart extends Component {
     }
 
     setNumberOfServings = (numberOfServings) => {
+        if(numberOfServings.includes(',')) 
+            numberOfServings = numberOfServings.replace(",", ".");
         if(parseInt(numberOfServings) >= 0 && parseInt(numberOfServings) <= 100)
             this.setState({ numberOfServings: numberOfServings, servingModal: false });
         else 

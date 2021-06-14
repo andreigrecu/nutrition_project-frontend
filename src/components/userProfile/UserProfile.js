@@ -9,6 +9,8 @@ import SignedInNavigationBar from './SignedInNavigationBar';
 import UserDailyCart from './UserDailyCart';
 import Footer from '../footer/Footer';
 import GoalGraphic from './GoalGraphic';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 class UserProfile extends Component {
     constructor(props) {
@@ -28,7 +30,9 @@ class UserProfile extends Component {
             carbosConsumed: [],
             fatsConsumed: [],
             proteinsConsumed: [],
-            workoutValues: []
+            workoutValues: [],
+
+            showUpdateWeightModal: false
         };
     }
 
@@ -162,7 +166,7 @@ class UserProfile extends Component {
         var yyyy = date.getFullYear();
         if(dd<10) {dd='0'+dd}
         if(mm<10) {mm='0'+mm}
-        date = mm+'/'+dd+'/'+yyyy;
+        date = dd+'/'+mm+'/'+yyyy;
         return date
      }
     
@@ -177,6 +181,38 @@ class UserProfile extends Component {
         return result;
     }
 
+    onHideUpdateWeightModal = () => {
+        this.setState({ showUpdateWeightModal: false });
+    }
+
+    onShowUpdateWeightModal = () => {
+        this.setState({ showUpdateWeightModal: true });
+    }
+
+    onIWillButtonClick = () => {
+        fetch(`http://localhost:4400/usersInfo/${this.props.user.id}/delayOneDay`, {
+                method: 'put',
+                headers: {'Content-type': 'application/json'},
+            })
+            .then(response => response.json())
+            .then(response => {
+                this.onHideUpdateWeightModal();
+            })
+            .catch(error => console.log(error))
+    }
+
+    onStopShowingClick = () => {
+        fetch(`http://localhost:4400/usersInfo/${this.props.user.id}/stopAlertingUpdateNeeded`, {
+                method: 'put',
+                headers: {'Content-type': 'application/json'},
+            })
+            .then(response => response.json())
+            .then(response => {
+                this.onHideUpdateWeightModal();
+            })
+            .catch(error => console.log(error))
+    }
+
     render() {
 
         const {
@@ -184,7 +220,8 @@ class UserProfile extends Component {
             carbosStatus,
             fatsStatus,
             proteinsStatus,
-            workoutValues
+            workoutValues,
+            showUpdateWeightModal
         } = this.state;
 
         const dates = this.Last7Days();
@@ -372,7 +409,20 @@ class UserProfile extends Component {
                         proteinsStatus={proteinsStatus}
                         getGraphicData={this.getGraphicData}
                         todayWorkout={workoutValues[0]}
+                        onShowUpdateWeightModal={this.onShowUpdateWeightModal}
                     />
+                    <Modal show={showUpdateWeightModal} onHide={this.onHideUpdateWeightModal} centered keyboard={true}> 
+                        <Modal.Header closeButton>
+                            <h5 style={{'textAlign': 'center'}}>It`s been a while since you updated your informations.</h5>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <h5>Please update your weight for a better experience!</h5>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="primary" onClick={this.onIWillButtonClick}>I will</Button>
+                            <Button variant="primary" onClick={this.onStopShowingClick}>Don`t show me again!</Button>
+                        </Modal.Footer>
+                    </Modal>
                 </Row>
                 <Row>
                     <UserDailyCart
