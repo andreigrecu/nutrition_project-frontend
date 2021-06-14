@@ -24,7 +24,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 
     return (
         <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-        {`${(percent * 100).toFixed(0)}%`}
+            {`${(percent * 100).toFixed(0)}%`}
         </text>
     );
 };
@@ -219,14 +219,22 @@ class FoodInfo extends Component {
                                                 <div>{recalculatedServingSize * 100} % of one portion</div> :(
                                                 this.props.itemsDetails.serving_size ?
                                                     <div>{finalString}</div>
-                                                :(  this.props.itemsDetails && this.props.itemsDetails.nutrition && this.props.itemsDetails.nutrition.weightPerServing ?
-                                                        <div>
-                                                            {this.props.itemsDetails.nutrition.weightPerServing['amount']} 
-                                                            {this.props.itemsDetails.nutrition.weightPerServing['unit']} 
-                                                            * {numberOfServings}
-                                                        </div> :(
-                                                            <div>{this.props.itemsDetails.readableServingSize} * {numberOfServings}</div>
-                                                        )
+                                                :(  
+                                                    this.props.itemsDetails && this.props.itemsDetails.nutrition && this.props.itemsDetails.nutrition.weightPerServing ?
+                                                        this.props.itemsDetails.nutrition.weightPerServing['amount'] ?
+                                                            <div>
+                                                                {this.props.itemsDetails.nutrition.weightPerServing['amount'] * numberOfServings} 
+                                                                {this.props.itemsDetails.nutrition.weightPerServing['unit']} 
+                                                            </div> : (
+                                                                <div>
+                                                                     {this.props.itemsDetails.nutrition.weightPerServing['amount']} 
+                                                                     {this.props.itemsDetails.nutrition.weightPerServing['unit']} 
+                                                                     * {numberOfServings}
+                                                                </div>
+                                                            )
+                                                            :(
+                                                                <div>{this.props.itemsDetails.readableServingSize} * {numberOfServings}</div>
+                                                            )
                                                 )
                                             )
                                         }

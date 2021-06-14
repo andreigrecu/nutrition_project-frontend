@@ -110,6 +110,9 @@ class DailyCaloriesCounter extends Component {
                         this.props.setUserBMR(this.state.userBMR);
                         this.setNutrientsPercentage(response['data']['carbohydratesPercent'], 
                             response['data']['fatsPercent'], response['data']['proteinsPercent']);
+
+                        if(response['data']['daysWithoutUpdate'] >= 60)
+                            this.props.onShowUpdateWeightModal();
                     }
                 })
                 .catch(error => console.log(error))

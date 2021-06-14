@@ -286,7 +286,7 @@ class SearchFood extends Component {
                         .then(response => response.json())
                         .then(response => {
                             this.setState({ autocompletedItems: response['results'], itemName: 'name', showHistory: false });
-                            if(response['results'].length === 0)
+                            if(response['results'] && response['results'].length === 0)
                                 this.setState({ nothingFound: true });
                         })
                         .catch(error => console.log(error))
@@ -300,7 +300,7 @@ class SearchFood extends Component {
                         .then(response => response.json())
                         .then(response => {
                             this.setState({ autocompletedItems: response['products'], itemName: 'title', showHistory: false });
-                            if(response['products'].length === 0)
+                            if(response['products'] && response['products'].length === 0)
                                 this.setState({ nothingFound: true });
                         })
                         .catch(error => console.log(error))
@@ -315,7 +315,7 @@ class SearchFood extends Component {
                         .then(response => response.json())
                         .then(response => {
                             this.setState({ autocompletedItems: response['menuItems'], itemName: 'title', showHistory: false });
-                            if(response['menuItems'].length === 0)
+                            if(response['menuItems'] && response['menuItems'].length === 0)
                                 this.setState({ nothingFound: true });
                         })
                         .catch(error => console.log(error))
@@ -411,6 +411,9 @@ class SearchFood extends Component {
     }
 
     setNumberOfServings = (numberOfServings) => {
+        if(numberOfServings.includes(',')) 
+            numberOfServings = numberOfServings.replace(",", ".");
+
         if(parseInt(numberOfServings) >= 0 && parseInt(numberOfServings) <= 100)
             this.setState({ numberOfServings: numberOfServings, servingModal: false });
         else
@@ -457,9 +460,12 @@ class SearchFood extends Component {
         let image = '';
         if(historyClickedItem)
             image = historyClickedItem['image'];
-        for(let i = 0; i < autocompletedItems.length; i++)
-            if(autocompletedItems[i]['name'] === itemsDetails['name'])
-                image = autocompletedItems[i]['image'];
+        
+        if(autocompletedItems) {
+            for(let i = 0; i < autocompletedItems.length; i++)
+                if(autocompletedItems[i]['name'] === itemsDetails['name'])
+                    image = autocompletedItems[i]['image'];
+        }
             
         if(clickedQuery === "") {
             clickedQuery = 'All';
