@@ -1,10 +1,12 @@
 .meals {
     font-size: 1.7em;
-    padding-bottom: 5%;
+    text-align: center;
 }
 
 .mealType {
     font-weight: none;
     cursor: pointer;
     padding-bottom: 3%;
+    cursor: pointer;
+    text-align: center;
 }
