@@ -41,10 +41,15 @@ class PosibilitiesModal extends Component {
             <Modal show={this.props.showPosibilitiesModal} onHide={this.handleClose} centered keyboard={true}> 
                 <Modal.Body>
                     <p className="meals">Meals</p>
+                    <hr></hr>
                     <p className="mealType" onClick={this.onBreakfastTypeClick}>Breakfast</p>
+                    <hr></hr>
                     <p className="mealType" onClick={this.onLunchTypeClick}>Lunch</p>
+                    <hr></hr>
                     <p className="mealType" onClick={this.onDinnerTypeClick}>Dinner</p>
+                    <hr></hr>
                     <p className="mealType" onClick={this.onSnacksTypeClick}>Snacks</p>
+                    <hr></hr>
                 </Modal.Body>
             </Modal>
         );

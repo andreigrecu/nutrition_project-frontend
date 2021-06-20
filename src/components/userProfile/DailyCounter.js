@@ -111,7 +111,7 @@ class DailyCaloriesCounter extends Component {
                         this.setNutrientsPercentage(response['data']['carbohydratesPercent'], 
                             response['data']['fatsPercent'], response['data']['proteinsPercent']);
 
-                        if(response['data']['daysWithoutUpdate'] >= 60)
+                        if(response['data']['daysWithoutUpdate'] >= 30)
                             this.props.onShowUpdateWeightModal();
                     }
                 })
@@ -316,7 +316,7 @@ class DailyCaloriesCounter extends Component {
                             calculatorType === 'Remaining Calories' &&
                             <div>
                                 <h4>{this.props.todayWorkout}</h4>
-                                <h5 className="counterText">Burned calories</h5>
+                                <h5 className="counterText">Your today burned calories</h5>
                             </div>
                         }
                     </Col>
