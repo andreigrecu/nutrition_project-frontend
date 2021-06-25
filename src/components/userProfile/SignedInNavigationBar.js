@@ -27,6 +27,10 @@ class SignedInNavigationBar extends Component {
         this.props.history.push('/users/changePassword');
     }
 
+    onTrophiesClick = () => {
+        this.props.history.push('/users/trophies');
+    }
+
     userInformations = () => {
         this.props.history.push('/users/informations');
     }
@@ -48,6 +52,9 @@ class SignedInNavigationBar extends Component {
                 </Dropdown.Item>
                 <Dropdown.Item>
                     <h6 onClick={this.onChangePasswordClick}>Change password</h6>
+                </Dropdown.Item>
+                <Dropdown.Item>
+                    <h6 onClick={this.onTrophiesClick}>Trophies</h6>
                 </Dropdown.Item>
                 <Dropdown.Item>
                     <h6 onClick={this.onDisconnetClick}>Disconnect</h6>

@@ -133,7 +133,6 @@ class FoodInfo extends Component {
         }
 
         numberOfServings = parseFloat(numberOfServings).toFixed(2);
-
         return(
             <div>
                 <ServingModal 
@@ -333,7 +332,7 @@ class FoodInfo extends Component {
                                                         nutrient['name'] !== 'Fat' &&
                                                         nutrient['name'] !== 'Proteins' &&
                                                         nutrient['name'] !== 'Protein' ?
-                                                        <li key={`${index} + ${nutrient}`}>{nutrient['name']}: {nutrient['amount']} {nutrient['unit']}</li>
+                                                        <li key={`${index} + ${nutrient}`}>{nutrient['name']}: {parseFloat((nutrient['amount'] * numberOfServings).toFixed(2))} {nutrient['unit']}</li>
                                                         :(<div key={index}></div>)
                                                 ))
                                             }   

@@ -16,6 +16,7 @@ import ChangePassword from '../components/changePassword/ChangePassword';
 import UserInfo from '../components/userInfo/UserInfo';
 import ForgotPassword from '../components/forgotPassword/ForgotPassword';
 import ResetPassword from '../components/forgotPassword/ResetPassword';
+import TrophiesPage from '../components/trophies/TrophiesPage';
 
 const initialState = {
   user: {
@@ -123,6 +124,9 @@ class App extends Component {
           )} />
           <Route path="/users/plans" exact render={(props) => (
             <PlanList {... props} user={state.user} />
+          )} />
+          <Route path="/users/trophies" exact render={(props) => (
+            <TrophiesPage {... props} user={state.user} />
           )} />
           <Route path="/chooseFood" exact render={(props) => (
             <ChooseFood {... props} 
