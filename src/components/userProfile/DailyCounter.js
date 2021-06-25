@@ -219,7 +219,10 @@ class DailyCaloriesCounter extends Component {
                                 </Col>
                                 <Col sm="1"></Col>
                                 <Col sm="3">
-                                    <h6>Good Job!</h6>
+                                {
+                                    alertWrongValue === false &&
+                                        <h6>Good Job!</h6>
+                                }
                                 </Col>
                                 <Col sm="3"></Col>
                             </Row>
