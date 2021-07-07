@@ -54,6 +54,16 @@ class FoodInfo extends Component {
             chosen_serving_size: this.props.numberOfServings
         })
 
+        if(this.props.itemsDetails.servings)
+            Object.assign(smallerDetails, {
+                servings: this.props.itemsDetails.servings
+            })
+        
+        if(this.props.itemsDetails.amount)
+            Object.assign(smallerDetails, {
+                amount: this.props.itemsDetails.amount
+            })
+
         let food;
         switch(this.props.mealType) {
             case 'breakfast':
@@ -128,11 +138,26 @@ class FoodInfo extends Component {
         let finalString;
         if(recalculatedServingSize) {
             finalString = recalculatedServingSize;
-            for(let i = 1; i < tokens.length; i++)
+            for(let i = 1; i < tokens.length; i++) 
                 finalString += " " + tokens[i];
         }
 
         numberOfServings = parseFloat(numberOfServings).toFixed(2);
+        if(!finalString && this.props.itemsDetails && this.props.itemsDetails.servings) {
+            if(this.props.itemsDetails.servings.size)
+                finalString = this.props.itemsDetails.servings.size;
+            if(numberOfServings && finalString)
+                finalString = (parseFloat(finalString) * numberOfServings).toFixed(2);
+            if(!finalString)
+                finalString = "";
+            if(this.props.itemsDetails.servings.unit === 'g' || this.props.itemsDetails.servings.unit === 'G')
+                finalString = finalString + " " + this.props.itemsDetails.servings.unit;
+            else if(this.props.itemsDetails.servings.unit === 'oz' || this.props.itemsDetails.servings.unit === 'Oz')
+                finalString = (parseFloat(finalString) * 28.35).toFixed(1) + " g";
+            else if(this.props.itemsDetails.servings.unit)
+                finalString = finalString + " " + this.props.itemsDetails.servings.unit;
+        }
+
         return(
             <div>
                 <ServingModal 
@@ -222,17 +247,34 @@ class FoodInfo extends Component {
                                                     this.props.itemsDetails && this.props.itemsDetails.nutrition && this.props.itemsDetails.nutrition.weightPerServing ?
                                                         this.props.itemsDetails.nutrition.weightPerServing['amount'] ?
                                                             <div>
-                                                                {this.props.itemsDetails.nutrition.weightPerServing['amount'] * numberOfServings} 
+                                                                {(this.props.itemsDetails.nutrition.weightPerServing['amount'] * numberOfServings).toFixed( )}
                                                                 {this.props.itemsDetails.nutrition.weightPerServing['unit']} 
                                                             </div> : (
                                                                 <div>
-                                                                     {this.props.itemsDetails.nutrition.weightPerServing['amount']} 
-                                                                     {this.props.itemsDetails.nutrition.weightPerServing['unit']} 
-                                                                     * {numberOfServings}
+                                                                     {
+                                                                        this.props.itemsDetails.nutrition.weightPerServing['amount'] > 0 ?
+                                                                           <div>
+                                                                               {(parseFloat(this.props.itemsDetails.nutrition.weightPerServing['amount']) * numberOfServings).toFixed(2) }
+                                                                               { this.props.itemsDetails.nutrition.weightPerServing['unit']}
+                                                                            </div>
+                                                                        : ( this.props.itemsDetails.amount &&
+                                                                                <div>
+                                                                                    {(parseFloat(this.props.itemsDetails.amount) * numberOfServings).toFixed(2)} 
+                                                                                    &nbsp;
+                                                                                    {this.props.itemsDetails.nutrition.weightPerServing['unit']}
+                                                                                </div>
+                                                                            )
+                                                                     }                                                                                                                
                                                                 </div>
                                                             )
                                                             :(
-                                                                <div>{this.props.itemsDetails.readableServingSize} * {numberOfServings}</div>
+                                                                this.props.itemsDetails.readableServingSize && !finalString ?
+                                                                    <div>{this.props.itemsDetails.readableServingSize} * {numberOfServings}</div> : (
+                                                                        finalString ?
+                                                                            <div>{ finalString }</div> :(
+                                                                                <div>a portion * {numberOfServings}</div>
+                                                                            )
+                                                                    )
                                                             )
                                                 )
                                             )
