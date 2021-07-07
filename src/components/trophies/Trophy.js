@@ -68,10 +68,12 @@ class Trophy extends Component {
                     <Col sm="4">
                         {
                             program && program['name'] &&
-                                <div className='tc grow bg-light-yellow br3 pa3 ma2 dib bw2 shadow-2'>
+                                <div className='tc grow bg-light-yellow br3 pa3 ma2 dib bw2 shadow-2' style={{'paddingRight': '12%', 'paddingLeft': '12%'}}>
                                     <img alt='trofee' height="200" width="200" src={this.imageRender.imageRender(this.props.numOfDays)} />
                                     <h2>{ program['name'] } trophy</h2>
-                                    <p>Congratulations on complying with your <b>{program['name']}</b> program for {this.props.numOfDays} days!</p>
+                                    <div>
+                                        <p>Congratulations on complying with your <b>{program['name']}</b> program for {this.props.numOfDays} days!</p>
+                                    </div>
                                 </div>
                         }
                     </Col>

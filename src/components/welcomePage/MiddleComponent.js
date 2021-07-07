@@ -17,7 +17,7 @@ class MiddleComponent extends Component {
                 <Row noGutters>
                     <Col sm = "3" className="motto"></Col>
                     <Col sm = "6" className="motto">
-                        <h1 style={{'textAlign': 'center'}}>The number one app for sport and nutrition</h1>
+                        <h1 style={{'textAlign': 'center'}}>Your app for sports and nutrition</h1>
                     </Col>
                     <Col sm = "3" className="motto"></Col>
                 </Row>

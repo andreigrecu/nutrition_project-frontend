@@ -432,6 +432,28 @@ class SearchFood extends Component {
         this.setState({ servingModal: false, alertNumberOfServingsFormat: false });
     }
 
+    ozToGrams = (autocompletedItems) => {
+
+        if(autocompletedItems) {
+            for(let i = 0; i < autocompletedItems.length; i++) {
+                if(autocompletedItems[i]['title'] && (autocompletedItems[i]['title'].includes(" oz") || autocompletedItems[i]['title'].includes(" Oz"))) {
+                    let res = autocompletedItems[i]['title'].split(" ");
+                    for(let j = 0; j < res.length; j++) {
+                        if((res[j].includes("oz") || res[j].includes("Oz")) && res[j].length <= 4) {
+                            let ozValue = res[j-1];
+                            if(res[j-1][0] === '(') {
+                                ozValue = res[j-1].substring(1);
+                            }
+                            ozValue = (parseFloat(ozValue) * 28.35).toFixed();
+                            res[j] = 'g';
+                            res[j-1] = ozValue;
+                        }
+                    }
+                    autocompletedItems[i]['title'] = res.join(" "); 
+                }
+            }
+        }
+    }
 
     render() {
 
@@ -462,10 +484,14 @@ class SearchFood extends Component {
             image = historyClickedItem['image'];
         
         if(autocompletedItems) {
-            for(let i = 0; i < autocompletedItems.length; i++)
+            for(let i = 0; i < autocompletedItems.length; i++) {
                 if(autocompletedItems[i]['name'] === itemsDetails['name'])
                     image = autocompletedItems[i]['image'];
+            }
         }
+        this.ozToGrams(autocompletedItems);
+        if(itemsDetails['title'])
+            this.ozToGrams([itemsDetails]);
             
         if(clickedQuery === "") {
             clickedQuery = 'All';

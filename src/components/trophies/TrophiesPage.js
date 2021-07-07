@@ -91,7 +91,7 @@ class TrophiesPage extends Component {
                                 <h1 className="trophiesHeader">Your achievements!</h1>
                                 : (
                                     <div>
-                                         <h1>Work harder in order to collect some trophies!</h1>
+                                        <h1 style={{'paddingBottom': '10%', 'paddingTop': '10%'}}>Work harder in order to collect some trophies!</h1>
                                         <img alt='noTrophies' height="600" width="400" src={NoTrophies} />
                                     </div>
                                 )
@@ -120,10 +120,10 @@ class TrophiesPage extends Component {
                 }
                 {
                     userTrophies.length ?
-                        <div style={{'paddingTop': '25%'}}>
+                        <div style={{'paddingTop': '25%', 'textAlign': 'center'}}>
                             <Footer />
                         </div> : (
-                            <div style={{'paddingTop': '15%'}}>
+                            <div style={{'paddingTop': '15%', 'textAlign': 'center'}}>
                                 <Footer />
                             </div>
                         )
