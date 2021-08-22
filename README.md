@@ -1,1 +1,2 @@
-# licenta_frontend
+# Nutrition project
+Check the master branch.
